@@ -727,14 +727,14 @@ svg.i { width: 18px; height: 18px; flex: none; }
   "turns": 12,
   "ap": 2,
   "apCarryMax": 1,
-  "officialDecideHeat": 22,
+  "officialDecideHeat": 23,
   "streamHeat": 16,
   "streamHeatPrivate": 9,
   "lockHeat": 30,
   "calloutClues": 5,
   "suspectClues": 3,
   "dataChance": 0.3,
-  "warGoal": 68,
+  "warGoal": 72,
   "calloutSus": 6,
   "officialPosts": 3,
   "eventsPerRun": 4
@@ -3037,7 +3037,612 @@ svg.i { width: 18px; height: 18px; flex: none; }
     }
    ]
   }
- ]
+ ],
+ "npcTalk": {
+  "npcRetorts": {
+   "copy": {
+    "1": [
+     [
+      "@{who} 你把两边主城截图放一起，自己看像不像",
+      "@{who} 借鉴就借鉴，别装原创就行",
+      "@{who} 地图结构、UI 布局，几乎一模一样，这叫巧合？",
+      "@{who} 「{q}」？对比视频都有人做了"
+     ],
+     [
+      "@{who} 开放世界就那几种做法，谁抄谁啊",
+      "@{who} 照你这标准，幻境也抄了一堆单机",
+      "@{who} 「{q}」？具体哪一处，说出来",
+      "@{who} 像不等于抄，这是两回事"
+     ]
+    ],
+    "2": [
+     [
+      "@{who} 缝合怪的粉丝最爱说“都长这样”",
+      "@{who} 抄完还要碰瓷，逆光真是两头占",
+      "@{who} 「{q}」，抄的人急了",
+      "@{who} 原创？你自己信吗"
+     ],
+     [
+      "@{who} 幻境人看什么都像抄自己，自恋了属于是",
+      "@{who} 抄袭这顶帽子你们戴了三年还不腻？",
+      "@{who} 「{q}」，又开始扣帽子了",
+      "@{who} 你这么懂抄袭，是幻境法务吗"
+     ]
+    ],
+    "3": [
+     [
+      "@{who} 逆光从上到下都是缝的，你们逆光人居然还有脸吵",
+      "@{who} 一个靠抄起家的游戏，粉丝也就这水平",
+      "@{who} 抄袭狗的粉丝，懂了",
+      "@{who} 你们逆光人就是喜欢吃别人嚼过的"
+     ],
+     [
+      "@{who} 幻境人天天喊抄袭，喊到自己都信了",
+      "@{who} 幻境当年抄的那几家你怎么不提？双标狗",
+      "@{who} 你们幻境人除了扣帽子还会什么",
+      "@{who} 一群拿抄袭当信仰的孝子"
+     ]
+    ]
+   },
+   "money": {
+    "1": [
+     [
+      "@{who} 榜单都在那，逆光首周就是不如预期",
+      "@{who} 「{q}」？去翻翻第三方数据",
+      "@{who} 流水差多少，自己算一下就知道",
+      "@{who} 数据不会骗人，人会"
+     ],
+     [
+      "@{who} 新游首周能排第二，已经很能打了",
+      "@{who} 「{q}」？那张图出处在哪",
+      "@{who} 拿三年老游戏比首周，你也好意思",
+      "@{who} 流水高不代表游戏好"
+     ]
+    ],
+    "2": [
+     [
+      "@{who} 首周这点流水，杀手是杀自己吧",
+      "@{who} 「{q}」，流水榜表示：？",
+      "@{who} 嘴上说不在乎流水，一看榜单就急了",
+      "@{who} 暴死就暴死，嘴硬什么"
+     ],
+     [
+      "@{who} 你是股东吗这么关心流水",
+      "@{who} 幻境人张嘴闭嘴流水，玩的是游戏还是财报",
+      "@{who} 「{q}」？P图也P用心点",
+      "@{who} 流水高就是好游戏？那彩票最好玩"
+     ]
+    ],
+    "3": [
+     [
+      "@{who} 逆光这流水，投资人怕是要连夜跑路",
+      "@{who} 撑不起流水还撑面子，逆光人真能装",
+      "@{who} 你们逆光人的钱包和游戏一样空",
+      "@{who} 首周暴死还嘴硬，丢人现眼"
+     ],
+     [
+      "@{who} 幻境的流水全是逼氪逼出来的，骄傲什么",
+      "@{who} 被割了三年还替公司数钱，幻境孝子真感人",
+      "@{who} 你们幻境人把流水当信仰，难怪被割",
+      "@{who} 造谣暴死的号，是幻境官方养的吧"
+     ]
+    ]
+   },
+   "perf": {
+    "1": [
+     [
+      "@{who} 首日排队闪退是事实，体验确实拉",
+      "@{who} 「{q}」？我手机开逆光十分钟就烫",
+      "@{who} 优化这块逆光还得练",
+      "@{who} 掉帧这种事，录屏就能看出来"
+     ],
+     [
+      "@{who} 首日人多，排队很正常",
+      "@{who} 「{q}」？我中端机挺稳的",
+      "@{who} 幻境首日也排过，你忘了？",
+      "@{who} 第二天就修好了，揪着不放干嘛"
+     ]
+    ],
+    "2": [
+     [
+      "@{who} 排队两小时进去就闪退，这就是杀手？",
+      "@{who} 「{q}」，那你开最高画质跑跑看",
+      "@{who} 逆光的优化和逆光人的嘴一样，都不稳",
+      "@{who} 卡成PPT还嘴硬，佩服"
+     ],
+     [
+      "@{who} 幻境三年了还发烫，好意思说别人",
+      "@{who} 对逆光优化这么上心，对自家更新怎么不关心",
+      "@{who} 「{q}」？你千元机跑幻境不卡？",
+      "@{who} 幻境人开始当测评博主了"
+     ]
+    ],
+    "3": [
+     [
+      "@{who} 优化做成这样也敢上线，逆光把玩家当测试员",
+      "@{who} 服务器和口碑一起崩了，逆光人还在硬撑",
+      "@{who} 连游戏都跑不稳，粉丝倒挺能吵",
+      "@{who} 逆光人：卡是因为人多。笑死"
+     ],
+     [
+      "@{who} 幻境那祖传 bug 修了吗就来挑刺",
+      "@{who} 幻境人只会挑别人刺，自家烂摊子装瞎",
+      "@{who} 你们幻境的优化，三年都没救回来",
+      "@{who} 一群拿千元机当证据的幻境孝子"
+     ]
+    ]
+   },
+   "dead": {
+    "1": [
+     [
+      "@{who} 照这势头，逆光确实悬",
+      "@{who} 「{q}」？新游死得快的见多了",
+      "@{who} 能不能撑住，看下个版本吧",
+      "@{who} 半年后再来看这楼"
+     ],
+     [
+      "@{who} 开服一周就喊关服，太早了吧",
+      "@{who} 「{q}」？每个新游都被这么咒过",
+      "@{who} 首周数据不差，关不了这么快",
+      "@{who} 关服预言家又出来了"
+     ]
+    ],
+    "2": [
+     [
+      "@{who} 关服倒计时，我先点个蜡烛",
+      "@{who} 截图了，半年后回来挖坟",
+      "@{who} 杀手杀到最后，把自己杀了",
+      "@{who} 「{q}」？等着看吧"
+     ],
+     [
+      "@{who} 天天咒别人关服，是怕了吧",
+      "@{who} 你上次预言关服准了吗",
+      "@{who} 先担心担心幻境的下个版本",
+      "@{who} 「{q}」，酸味都溢出来了"
+     ]
+    ],
+    "3": [
+     [
+      "@{who} 逆光撑不过一年，到时候逆光人去哪哭",
+      "@{who} 逆光关服那天，我第一个来这楼",
+      "@{who} 凉了以后记得回幻境，我们不嫌弃",
+      "@{who} 一群陪葬的逆光人"
+     ],
+     [
+      "@{who} 盼着别家死，难怪路人都烦幻境人",
+      "@{who} 真该关服的是那个三年不更新的",
+      "@{who} 幻境人咒别人关服的样子，像被抢了饭碗",
+      "@{who} 你们幻境孝子心里只有恨"
+     ]
+    ]
+   },
+   "content": {
+    "1": [
+     [
+      "@{who} 幻境的地图和内容量，目前还没人追上",
+      "@{who} 「{q}」？三年的积累不是一周能比的",
+      "@{who} 剧情美术这块，幻境确实是标杆",
+      "@{who} 内容量这事，看更新表就知道"
+     ],
+     [
+      "@{who} 逆光的战斗手感是真的好",
+      "@{who} 「{q}」？内容要看更新速度",
+      "@{who} 幻境地图大，但跑图确实累",
+      "@{who} 新游内容少很正常，给点时间"
+     ]
+    ],
+    "2": [
+     [
+      "@{who} 逆光就一张地图，跑完就没了",
+      "@{who} 内容少就说才开服，那三年后再来比",
+      "@{who} 「{q}」，逆光剧情我看困了",
+      "@{who} 战斗手感好？那也得有东西打啊"
+     ],
+     [
+      "@{who} 天花板？三年没动过的天花板",
+      "@{who} 幻境剧情？我只记得睡着了",
+      "@{who} 内容多有什么用，全是重复劳动",
+      "@{who} 「{q}」，跑图跑到怀疑人生"
+     ]
+    ],
+    "3": [
+     [
+      "@{who} 逆光那点内容也就够逆光人吹一周",
+      "@{who} 内容稀烂还敢叫杀手，脸比地图大",
+      "@{who} 逆光人没玩过好游戏，给块地图就叫天花板",
+      "@{who} 你们逆光人的审美也就这样了"
+     ],
+     [
+      "@{who} 幻境三年就会卖皮肤，内容早掏空了",
+      "@{who} 吹了三年的地图，全是空气墙",
+      "@{who} 幻境要真有内容，你们也不用来别家吵",
+      "@{who} 一群把重复劳动当信仰的幻境人"
+     ]
+    ]
+   },
+   "fans": {
+    "1": [
+     [
+      "@{who} 好好说话，别扣帽子",
+      "@{who} 「{q}」？我在聊游戏，你在聊人",
+      "@{who} 就事论事，别上升玩家",
+      "@{who} 吵归吵，别骂人"
+     ],
+     [
+      "@{who} 别上升玩家，大家都是来聊游戏的",
+      "@{who} 「{q}」？你这么说就没意思了",
+      "@{who} 好好说话，别一口一个孝子",
+      "@{who} 你骂人我就不跟你聊了"
+     ]
+    ],
+    "2": [
+     [
+      "@{who} 说不过就骂人，逆光人老套路了",
+      "@{who} 急了急了，这就开始人身攻击了",
+      "@{who} 「{q}」，这话你对着镜子说",
+      "@{who} 素质这么高，逆光官方知道吗"
+     ],
+     [
+      "@{who} 幻境人：我们有素质。也是幻境人：「{q}」",
+      "@{who} 破防了就直说，别绕",
+      "@{who} 说别人急之前看看你打了多少字",
+      "@{who} 素质？你先学会好好说话"
+     ]
+    ],
+    "3": [
+     [
+      "@{who} 逆光人的素质，整个评论区都看到了",
+      "@{who} 难怪路人都绕着逆光人走",
+      "@{who} 跟逆光人讲道理，是我高看你们了",
+      "@{who} 一群只会骂人的逆光人"
+     ],
+     [
+      "@{who} 幻境玩家的优越感，全网独一份",
+      "@{who} 难怪幻境口碑越来越差，全是你这种",
+      "@{who} 幻境孝子永远在护主，护到路人全跑了",
+      "@{who} 你们幻境人吵架的样子，比游戏还精彩"
+     ]
+    ]
+   },
+   "shill": {
+    "1": [
+     [
+      "@{who} 逆光的宣传确实有点过了",
+      "@{who} 「{q}」？杀手是他们自己喊出来的",
+      "@{who} 营销好不代表游戏好",
+      "@{who} 广告都刷到我脸上了"
+     ],
+     [
+      "@{who} 幻境宣传也不少，你们习惯了而已",
+      "@{who} 「{q}」？说别人营销先看看自家",
+      "@{who} 两家都在营销，没必要只盯一家",
+      "@{who} 热搜谁没上过"
+     ]
+    ],
+    "2": [
+     [
+      "@{who} 一夜之间冒出这么多逆光人，懂的都懂",
+      "@{who} 热搜是不是买的，大家心里有数",
+      "@{who} 恰饭视频看多了吧",
+      "@{who} 「{q}」，水军味儿太冲了"
+     ],
+     [
+      "@{who} 幻境控评控了三年，好意思说别人",
+      "@{who} 幻境热搜挂一周的时候你怎么不说",
+      "@{who} 夸逆光的都是水军，夸幻境的都是真爱，懂了",
+      "@{who} 「{q}」？你这条像是收了钱的"
+     ]
+    ],
+    "3": [
+     [
+      "@{who} 逆光水军一条多少钱？这楼一半都是",
+      "@{who} 营销堆出来的游戏，粉丝也是堆出来的",
+      "@{who} 收钱控评能不能换个新号",
+      "@{who} 一群拿钱办事的逆光号"
+     ],
+     [
+      "@{who} 幻境官方养的号今天全出来了",
+      "@{who} 幻境营销费比开发费还多",
+      "@{who} 收了钱的幻境号，先把 IP 藏好",
+      "@{who} 一群被营销洗脑的幻境孝子"
+     ]
+    ]
+   },
+   "generic": {
+    "1": [
+     [
+      "@{who} 说得不对，幻境这块确实更好",
+      "@{who} 「{q}」？我两个都玩，幻境更完整",
+      "@{who} 你可以喜欢逆光，但别踩幻境",
+      "@{who} 讲道理，这事你站不住"
+     ],
+     [
+      "@{who} 不同意，逆光这块明显更好",
+      "@{who} 「{q}」？两个都玩过的表示不认同",
+      "@{who} 幻境很好，但不是谁都得让着它",
+      "@{who} 讲道理，你这结论太武断了"
+     ]
+    ],
+    "2": [
+     [
+      "@{who} 典，逆光人又开始了",
+      "@{who} 「{q}」，你自己信吗",
+      "@{who} 杀手杀手，杀了个寂寞",
+      "@{who} 你这逻辑我真绷不住"
+     ],
+     [
+      "@{who} 典，幻境人又急了",
+      "@{who} 「{q}」，这话放三年前我还信",
+      "@{who} 老大哥慌了，粉丝先跳了",
+      "@{who} 你这逻辑我真绷不住"
+     ]
+    ],
+    "3": [
+     [
+      "@{who} 逆光人能不能别出来丢人了",
+      "@{who} 我宣布这楼逆光人全输",
+      "@{who} 跟逆光人说话真累",
+      "@{who} 逆光人的嘴比逆光的服务器还硬"
+     ],
+     [
+      "@{who} 幻境人能不能有点自知之明",
+      "@{who} 我宣布这楼幻境人全输",
+      "@{who} 幻境孝子的嘴比幻境的更新还硬",
+      "@{who} 跟幻境人说话真累"
+     ]
+    ]
+   }
+  },
+  "npcBack": {
+   "copy": [
+    [
+     "@{who} 对，对比图我也看过，确实像",
+     "@{who} 说到点子上了，就是照着做的",
+     "@{who} 顶你，抄就是抄"
+    ],
+    [
+     "@{who} 说得对，开放世界本来就长这样",
+     "@{who} 顶你，扣抄袭帽子太廉价了",
+     "@{who} 就是，哪来那么多抄"
+    ]
+   ],
+   "money": [
+    [
+     "@{who} 数据摆着，顶你",
+     "@{who} 对，榜单不会骗人",
+     "@{who} 说得好，流水就是硬道理"
+    ],
+    [
+     "@{who} 对，新游首周这成绩不差了",
+     "@{who} 顶你，那张图就是P的",
+     "@{who} 说得好，别拿流水说事"
+    ]
+   ],
+   "perf": [
+    [
+     "@{who} 对，我也闪退了好几次",
+     "@{who} 顶你，排队排到我睡着",
+     "@{who} 说得没错，优化确实拉"
+    ],
+    [
+     "@{who} 对，我也挺流畅的",
+     "@{who} 顶你，首日排队太正常了",
+     "@{who} 就是，幻境首日也卡"
+    ]
+   ],
+   "dead": [
+    [
+     "@{who} 我也觉得悬",
+     "@{who} 顶你，坐等挖坟",
+     "@{who} 说得好，蜡烛我也点上"
+    ],
+    [
+     "@{who} 对，关服论太早了",
+     "@{who} 顶你，咒别人关服没意思",
+     "@{who} 就是，逆光能撑住"
+    ]
+   ],
+   "content": [
+    [
+     "@{who} 对，内容量这块没得比",
+     "@{who} 顶你，剧情是真的好",
+     "@{who} 说到心坎上了"
+    ],
+    [
+     "@{who} 对，战斗手感是真的爽",
+     "@{who} 顶你，跑图确实累",
+     "@{who} 说得好，给新游点时间"
+    ]
+   ],
+   "fans": [
+    [
+     "@{who} 对，他们就是说不过就骂",
+     "@{who} 顶你，别跟他们一般见识",
+     "@{who} 说得好"
+    ],
+    [
+     "@{who} 对，幻境人就这样",
+     "@{who} 顶你，别理他",
+     "@{who} 说得好"
+    ]
+   ],
+   "shill": [
+    [
+     "@{who} 对，水军味太冲了",
+     "@{who} 顶你，热搜明显是买的",
+     "@{who} 说得好"
+    ],
+    [
+     "@{who} 对，幻境控评才是老手",
+     "@{who} 顶你，双标太明显了",
+     "@{who} 说得好"
+    ]
+   ],
+   "generic": [
+    [
+     "@{who} 说得好，顶你",
+     "@{who} +1，就是这个理",
+     "@{who} 终于有个明白人"
+    ],
+    [
+     "@{who} 说得好，顶你",
+     "@{who} +1，就是这个理",
+     "@{who} 终于有个明白人"
+    ]
+   ]
+  },
+  "seen": {
+   "pengsha": [
+    "@{who} 吹成这样，你是来给幻境招黑的吧",
+    "@{who} 这么吹，幻境策划看了都脸红",
+    "@{who} 捧杀是吧，我看出来了"
+   ],
+   "lacai": [
+    "@{who} 拉踩这么明显，钓鱼的吧",
+    "@{who} 又是踩一捧一，套路都不换",
+    "@{who} 你这拉踩是专门挑事的吧"
+   ],
+   "neutral": [
+    "@{who} 嘴上说不站队，屁股坐得挺正",
+    "@{who} 「客观」两个字你也配用",
+    "@{who} 中立？你这偏得有点明显"
+   ],
+   "yinyang": [
+    "@{who} [微笑]都打出来了，阴阳给谁看",
+    "@{who} 阴阳怪气这么熟练，老手了",
+    "@{who} 你这阴阳味儿隔着屏幕都闻到了"
+   ],
+   "newbie": [
+    "@{who} 萌新？你这问题问得一点都不萌新",
+    "@{who} 装萌新带节奏，见多了",
+    "@{who} 萌新提问，满分节奏"
+   ],
+   "bait": [
+    "@{who} 钓鱼钓得这么明显，谁上钩谁傻",
+    "@{who} 这鱼饵我闻到了",
+    "@{who} 钓鱼执法是吧"
+   ],
+   "data": [
+    "@{who} 截图出处？P得挺用心",
+    "@{who} 来源不明的数据，下一个",
+    "@{who} 「据内部人士透露」，懂了"
+   ],
+   "mock": [
+    "@{who} 你这嘲讽写在脸上了",
+    "@{who} 明着损也算一种坦诚",
+    "@{who} 好家伙，直接开嘲"
+   ],
+   "meme": [
+    "@{who} 玩梗可以，别当真就行",
+    "@{who} 梗是好梗，人是串子",
+    "@{who} 又在玩梗，懂了"
+   ],
+   "fuel": [
+    "@{who} 又来拱火，你到底站哪边",
+    "@{who} 你是这楼的气氛组吗",
+    "@{who} 起哄的那位，我注意你很久了"
+   ],
+   "overread": [
+    "@{who} 你懂什么了？别乱解读",
+    "@{who} 懂你意思？你懂个啥",
+    "@{who} 强行解读，我都没你会想"
+   ],
+   "sincere": [
+    "@{who} 这话听着像真心，又像在串",
+    "@{who} 你这话怎么读都不对劲",
+    "@{who} 有点意思，我记下了"
+   ]
+  },
+  "kwOpen": [
+   "@{who} 「{kw}」？",
+   "@{who} 张口就是「{kw}」，",
+   "@{who} 又是「{kw}」那套，",
+   "@{who} 一说「{kw}」就来劲了，",
+   "@{who} 「{kw}」这词你也说得出口，",
+   "@{who} 你说「{kw}」，"
+  ],
+  "rematch": [
+   "@{who} 又是你？",
+   "@{who} 怎么哪楼都有你，",
+   "@{who} 上一楼没吵够是吧，",
+   "@{who} 你还没走啊，",
+   "@{who} 老熟人了，",
+   "@{who} 又见面了，"
+  ],
+  "ally": [
+   "@{who} 说得好，这楼我站你",
+   "@{who} +1，就是这个理",
+   "@{who} 兄弟别跟他废话了，他听不懂",
+   "@{who} 顶你，你一个人顶住了",
+   "@{who} 我来支援了",
+   "@{who} 说得太对了，他已经没话说了",
+   "@{who} 我替你补一刀",
+   "@{who} 你说的我都想说",
+   "@{who} 稳住，我们人多",
+   "@{who} 漂亮，这下他接不住了",
+   "@{who} 就喜欢看你怼人",
+   "@{who} 顶上去，让大家都看看"
+  ],
+  "pile": [
+   "@{who} 两个人都说你了，还嘴硬？",
+   "@{who} 你看，大家都这么觉得",
+   "@{who} 一个人吵不过就换我来",
+   "@{who} 楼上说得没错，你认了吧",
+   "@{who} 被两个人怼了还不服？",
+   "@{who} 你一个人能吵过我们俩？",
+   "@{who} 我也来说两句：你不对",
+   "@{who} 你回他啊，怎么不回了",
+   "@{who} 他说得对，我补充一下：你更不对",
+   "@{who} 来，接着说，我们都在"
+  ],
+  "both2": [
+   "@{who} @{who2} 你俩吵了半天，说的根本不是一件事",
+   "@{who} @{who2} 都少说两句吧",
+   "@{who} @{who2} 你们俩能不能私聊",
+   "@{who} @{who2} 我看你俩都挺急的",
+   "@{who} @{who2} 吵到现在，你俩谁两个游戏都玩过？",
+   "@{who} @{who2} 停一下，我理一下你俩到底在吵什么",
+   "@{who} @{who2} 你俩各让一步，海阔天空",
+   "@{who} @{who2} 都是玩游戏的，何必呢"
+  ],
+  "troll2": [
+   "@{who} {who2}说你急了，你急没急",
+   "@{who} 你就这么让{who2}说了？",
+   "@{who} @{who2} 这俩今天必须分个胜负",
+   "@{who} {who2}那句你接得住吗",
+   "@{who} 我押{who2}赢，你证明我错了",
+   "@{who} @{who2} 正义必胜！（指不知道谁正义）",
+   "@{who} {who2}都怼到你脸上了",
+   "@{who} @{who2} 前排出售瓜子，二位继续"
+  ],
+  "newbieAsk": [
+   "@{who} 大佬，群里说的是真的吗",
+   "@{who} 你也觉得是这样吗？",
+   "@{who} 那我还要不要下逆光啊",
+   "@{who} 你们都这么说，我有点慌",
+   "@{who} 我刚截图发给我同学了",
+   "@{who} 所以到底听谁的呀"
+  ],
+  "decor": {
+   "2": [
+    "",
+    "",
+    "，典",
+    "，绷不住了",
+    "，懂？",
+    "（",
+    "，急了"
+   ],
+   "3": [
+    "",
+    "",
+    "，懂的都懂",
+    "。别回了",
+    "，真的丢人",
+    "，我说完了"
+   ]
+  }
+ }
 }</script>
 
 <script>
@@ -3211,7 +3816,41 @@ const Engine = (() => {
 
   const authorName = (c) => c.author.type === 'acc' ? accName(c.author.id) : npcDef(c.author.id).name;
   const quoteOf = (c) => { const t = (c.core || c.text || '').replace(/^【.*?】/, '').replace(/^@\S+\s/, '').replace(D.lines.agen_carry, ''); return t.length > 12 ? t.slice(0, 12) + '…' : t; };
-  const fmt = (line, t, st) => { const qs = st && t && t.parent != null && t.author.type === 'npc' && (t.text.includes('「') || quoteOf(t).length < 6) ? claim(st, t.root) : t; return line.replace(/\{who\}/g, t ? authorName(t) : '').replace(/\{q\}/g, qs ? quoteOf(qs) : ''); };
+  const fmt = (line, t, st, ex) => { const qs = st && t && t.parent != null && t.author.type === 'npc' && (t.text.includes('「') || quoteOf(t).length < 6) ? claim(st, t.root) : t;
+    let out = line.replace(/\{who\}/g, t ? authorName(t) : '').replace(/\{q\}/g, qs ? quoteOf(qs) : '');
+    if (ex && ex.who2) out = out.replace(/\{who2\}/g, authorName(ex.who2));
+    if (out.includes('{kw}')) out = out.replace(/\{kw\}/g, (ex && ex.kw) || (t ? quoteOf(t).slice(0, 4) : ''));
+    return out; };
+  // ---------- NPC lines that read what they reply to ----------
+  const NT = () => D.npcTalk || {};
+  function kwOf(text) { for (const t of Object.values(D.topics || {})) { const k = t.kw.find(w => text.includes(w)); if (k) return k; } return ''; }
+  function topicFor(s, t) { let tags = topicsOf(t.text); if (!tags.length && t.root != null) tags = topicsOf(claim(s, t.root).text); return tags.length ? tags[Math.floor(rand(s) * tags.length)] : 'generic'; }
+  const stripAt = (x) => x.replace(/^@\{who\}\s*/, '');
+  // mode: 'hit' (attack t at lvl) | 'back' (side with t). Mixes topic pools with the archetype's own voice.
+  function npcLine(s, def, mode, t, lvl, fallback) {
+    const n = npc(s, def.id), side = sign(n.stance) || 1, si = side > 0 ? 0 : 1;
+    const topic = topicFor(s, t);
+    let line = null;
+    if (mode === 'hit') {
+      const pool = NT().npcRetorts && NT().npcRetorts[topic] && NT().npcRetorts[topic][String(lvl)] && NT().npcRetorts[topic][String(lvl)][si];
+      if (pool && pool.length && rand(s) < 0.6) line = pickT(s, pool);
+    } else if (mode === 'back') {
+      const pool = NT().npcBack && NT().npcBack[topic] && NT().npcBack[topic][si];
+      if (pool && pool.length && rand(s) < 0.6) line = pickT(s, pool);
+    }
+    if (!line && fallback) line = pickT(s, fallback);
+    if (!line) return null;
+    // openers: an old foe ("又是你？") or the exact word the player used ("「缝合」？")
+    if (mode === 'hit' && /^@\{who\}/.test(line)) {
+      const foe = t.author.type === 'npc' && (s.ng || {})[def.id + '|' + t.author.id] >= 2;
+      const kw = t.author.type === 'acc' ? kwOf(t.text) : '';
+      if (foe && NT().rematch && rand(s) < 0.6) line = pickT(s, NT().rematch) + stripAt(line);
+      else if (kw && NT().kwOpen && rand(s) < 0.45 && !line.includes('{q}')) line = pickT(s, NT().kwOpen) + stripAt(line);
+      const dec = NT().decor && NT().decor[String(lvl)];
+      if (dec && rand(s) < 0.4 && !/[？?！!）」]$/.test(line)) line = line.replace(/[。]$/, '') + pickT(s, dec);
+    }
+    return fmt(line, t, s, { kw: kwOf(t.text) });
+  }
   const pickT = (s, pool) => { s.usedT = s.usedT || {}; const fresh = pool.filter(x => !s.usedT[x]); const x = pick(s, fresh.length ? fresh : pool); s.usedT[x] = 1; return x; };
   const talk = (arch, sit) => (D.talk[arch] && D.talk[arch][sit]) || null;
   const postLine = (id) => D.posts.find(l => l.id === id);
@@ -3782,37 +4421,40 @@ const Engine = (() => {
     let line = null, stance = 0;
     const T = (sit) => talk(def.arch, sit);
     const say = (sit) => { const pool = T(sit); return pool ? fmt(pickT(s, pool), t, s) : null; };
+    const hit = (lv, sit) => npcLine(s, def, 'hit', t, lv, T(sit));
+    const back = (sit) => npcLine(s, def, 'back', t, 1, T(sit));
+    const seenBy = (sit) => { const pool = fromAcc && NT().seen && NT().seen[t.tone]; return pool && rand(s) < 0.55 ? fmt(pickT(s, pool), t, s) : say(sit); };
     // talking back: the player replied directly to this netizen
     const parent = t.parent != null ? claim(s, t.parent) : null;
     if (fromAcc && parent && parent.author.type === 'npc' && parent.author.id === def.id && n.stance !== 0 && ['fan', 'rival', 'hater', 'newbie'].includes(def.arch)) {
       const m = meaning(t, res);
       const lv = 1 + Math.min(2, Math.floor(claim(s, t.root).fight / 2));
       ctx.lvl = lv;
-      if (t.stance === 0) { line = say('heckled'); stance = sign(n.stance) * 2; ctx.duel = true; ctx.lvl = 1; }
-      else if (sign(m) === sign(n.stance)) { line = say('thanks') || say('agree'); stance = sign(n.stance) * 2; }
-      else { line = say('duel' + lv); stance = sign(n.stance) * 2; ctx.duel = true; }
+      if (t.stance === 0) { line = t.tone === 'overread' && NT().seen ? fmt(pickT(s, NT().seen.overread), t, s) : say('heckled'); stance = sign(n.stance) * 2; ctx.duel = true; ctx.lvl = 1; }
+      else if (sign(m) === sign(n.stance)) { line = back('thanks') || say('agree'); stance = sign(n.stance) * 2; }
+      else { line = hit(Math.max(lv, Math.min(3, t.lvl || 0)), 'duel' + lv); ctx.lvl = Math.max(lv, Math.min(3, t.lvl || 0)); stance = sign(n.stance) * 2; ctx.duel = true; }
     }
     if (!line) switch (def.arch) {
       case 'fan':
-        if (res === 'L' && sp > 0) { line = say(fromAcc ? 'agree_player' : 'agree'); stance = 2; }
-        else if (res === 'I' && sp > 0) { line = say('spot'); if (fromAcc) addClue(s, n, t.author.id, 1, '在装' + D.vocab.A + '粉给' + D.vocab.Afans + '招黑', false); }
-        else if (res === 'L' && sp < 0) { line = say('rebut'); stance = 2; }
+        if (res === 'L' && sp > 0) { line = rand(s) < 0.5 ? back(fromAcc ? 'agree_player' : 'agree') : say(fromAcc ? 'agree_player' : 'agree'); stance = 2; }
+        else if (res === 'I' && sp > 0) { line = seenBy('spot'); if (fromAcc) addClue(s, n, t.author.id, 1, '在装' + D.vocab.A + '粉给' + D.vocab.Afans + '招黑', false); }
+        else if (res === 'L' && sp < 0) { line = hit(1, 'rebut'); stance = 2; }
         break;
       case 'rival':
-        if (t.lacai && res !== 'I') { line = say('lacai'); stance = -2; s.stigma++; gainWar(s, 1); }
-        else if (res === 'L' && sp > 0) { line = say('angry'); stance = -2; s.stigma++; }
-        else if (res === 'I' && sp > 0) { line = say('spot'); if (fromAcc) addClue(s, n, t.author.id, 1, '一眼假，像是在串', false); }
-        else if (res === 'L' && sp < 0) { line = say('agree'); stance = -2; }
+        if (t.lacai && res !== 'I') { line = rand(s) < 0.5 ? hit(2, 'lacai') : say('lacai'); stance = -2; s.stigma++; gainWar(s, 1); }
+        else if (res === 'L' && sp > 0) { line = hit(t.ext >= 2 ? 2 : 1, 'angry'); stance = -2; s.stigma++; }
+        else if (res === 'I' && sp > 0) { line = seenBy('spot'); if (fromAcc) addClue(s, n, t.author.id, 1, '一眼假，像是在串', false); }
+        else if (res === 'L' && sp < 0) { line = back('agree'); stance = -2; }
         break;
       case 'hater':
-        if (res === 'L' && sp > 0) { line = say('angry'); stance = -1; s.stigma++; }
+        if (res === 'L' && sp > 0) { line = hit(t.ext >= 2 ? 2 : 1, 'angry'); stance = -1; s.stigma++; }
         else if (res === 'L' && sp < 0) { line = say('agree'); stance = -1; }
         else if (res === 'I') { line = say('laugh'); }
         break;
       case 'spotter':
         if (res === 'I' && fromAcc) {
           const isMain = D.accounts.find(x => x.id === t.author.id).persona === 'sincere';
-          line = say(isMain ? 'call_main' : 'call'); addClue(s, n, t.author.id, 1, '的发言一看就是在串', false);
+          line = isMain ? say('call_main') : seenBy('call'); addClue(s, n, t.author.id, 1, '的发言一看就是在串', false);
         }
         break;
       case 'echo': {
@@ -3830,7 +4472,7 @@ const Engine = (() => {
         line = say('any');
         break;
       case 'newbie':
-        if (res === 'L' && sp > 0) { line = say(fromAcc ? 'agree_player' : 'agree'); stance = 2; n.stance = clamp(n.stance + 1, -2, 2); }
+        if (res === 'L' && sp > 0) { line = !fromAcc && NT().newbieAsk && rand(s) < 0.35 ? fmt(pickT(s, NT().newbieAsk), t, s) : say(fromAcc ? 'agree_player' : 'agree'); stance = 2; n.stance = clamp(n.stance + 1, -2, 2); }
         else if (res === 'L' && sp < 0) { line = say('confused'); n.stance = clamp(n.stance - 1, -2, 2); }
         else if (res === 'I') { line = say('get'); n.stance = clamp(n.stance - 1, -2, 2); }
         break;
@@ -3924,22 +4566,41 @@ const Engine = (() => {
         const pr = Math.min(0.85, 0.45 + 0.08 * root.fight);
         if (rand(s) > pr) continue;
         const level = Math.max(1 + Math.min(2, Math.floor(root.fight / 2)), p.author.type === 'acc' ? Math.min(3, p.lvl || 0) : 0);
-        const line = fmt(pickT(s, talk(def.arch, 'duel' + level)), p, s);
+        const line = npcLine(s, def, 'hit', p, level, talk(def.arch, 'duel' + level));
         p.readings[def.id] = p.readings[def.id] || res;
         const c = npcReply(s, n, p, line, sign(n.stance) * 2, { crowd: true, duel: true, lvl: level });
         n.involved = true; used[def.id] = (used[def.id] || 0) + 1; total++;
         root.fight++; root.fuel--; gainWar(s, level === 3 ? 2 : 1);
         if (p.author.type === 'acc') grudgeUp(s, def.id, p.author.id);
+        else { s.ng = s.ng || {}; const k1 = def.id + '|' + p.author.id, k2 = p.author.id + '|' + def.id; s.ng[k1] = (s.ng[k1] || 0) + 1; s.ng[k2] = (s.ng[k2] || 0) + 1; }
         if (level === 3 && (def.arch === 'rival' || def.arch === 'hater' || def.arch === 'fan')) s.stigma++;
         log(s, 'crowd', `${def.name}：${line}`, def.id);
         queue.push(c);
+        // tag-team: someone from the same camp backs the attacker, sometimes piles on the target
+        if (NT().ally && rand(s) < 0.32 && total < 16) {
+          const mates = D.npcs.filter(x => duelists.includes(x.arch) && x.id !== def.id && x.circles.includes(p.circle) && (used[x.id] || 0) < 2 && sign(npc(s, x.id).stance) === sign(n.stance) && !(p.author.type === 'npc' && p.author.id === x.id));
+          if (mates.length) {
+            const md = mates[Math.floor(rand(s) * mates.length)], mn = npc(s, md.id);
+            const al = fmt(pickT(s, NT().ally), c, s);
+            npcReply(s, mn, c, al, sign(mn.stance) * 2, { crowd: true }); log(s, 'crowd', `${md.name}：${al}`, md.id);
+            used[md.id] = (used[md.id] || 0) + 1;
+            if (NT().pile && rand(s) < 0.55) {
+              const pl = fmt(pickT(s, NT().pile), p, s);
+              npcReply(s, mn, p, pl, sign(mn.stance) * 2, { crowd: true, duel: true, lvl: level });
+              root.fight++; gainWar(s, 1); total++;
+              if (p.author.type === 'acc') grudgeUp(s, md.id, p.author.id);
+              log(s, 'crowd', `${md.name}：${pl}`, md.id);
+            }
+          }
+        }
         // bystanders
-        if (rand(s) < 0.35) {
+        if (rand(s) < 0.4) {
           const bys = D.npcs.filter(x => ['lurker', 'echo', 'centrist', 'spotter'].includes(x.arch) && x.circles.includes(p.circle) && !by[x.id]);
           if (bys.length) {
             const bd = bys[Math.floor(rand(s) * bys.length)]; by[bd.id] = true;
             let bl = null;
-            if (bd.arch === 'centrist') { bl = fmt(pickT(s, talk('centrist', 'both')), c, s); if (rand(s) < 0.5) s.war++; }
+            if (bd.arch === 'centrist') { bl = NT().both2 && rand(s) < 0.6 ? fmt(pickT(s, NT().both2), c, s, { who2: p }) : fmt(pickT(s, talk('centrist', 'both')), c, s); if (rand(s) < 0.5) s.war++; }
+            else if (bd.arch === 'lurker' && NT().troll2 && rand(s) < 0.45) bl = fmt(pickT(s, NT().troll2), p, s, { who2: c });
             else if (bd.arch === 'echo') bl = pickT(s, talk('echo', 'duel'));
             else if (bd.arch === 'lurker') bl = pickT(s, talk('lurker', 'any'));
             else if (bd.arch === 'spotter' && root.fight >= 3) { bl = pickT(s, talk('spotter', 'watch')); if (root.author.type === 'acc') addClue(s, npc(s, bd.id), root.author.id, 1, '是这场对线的起头人', false); }
