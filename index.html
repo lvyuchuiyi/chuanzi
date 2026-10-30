@@ -805,6 +805,18 @@ body:has(.fx-amb) { background: transparent !important; }
 .skincard i { width: 100%; height: 76px; border-radius: 10px; }
 .skincard b { font-size: 15px; } .skincard small { font-size: 11.5px; color: var(--t-ink-3); font-weight: 500; }
 @media (max-width: 560px) { .skinbtn span { display: none; } .skincards { grid-template-columns: 1fr; } .skincard { grid-template-columns: 90px 1fr; justify-items: start; text-align: left; } .skincard i { grid-row: span 2; height: 52px; } }
+/* two-account combos + fuzzy forecast */
+.duo { font-size: 12.5px; line-height: 1.6; color: var(--t-ink-2); background: color-mix(in srgb, var(--t-acc) 10%, var(--t-bg-2)); border: 1.5px dashed color-mix(in srgb, var(--t-acc) 55%, transparent); border-radius: 12px; padding: 8px 12px; }
+.duo > b:first-child { display: inline-block; margin-right: 8px; font-size: 11px; font-weight: 900; color: #fff; background: var(--t-acc); border-radius: 6px; padding: 1px 7px; }
+.duo b { color: var(--t-ink); }
+.hc-tag.combo { background: color-mix(in srgb, var(--t-acc) 22%, transparent); color: var(--t-acc); font-weight: 800; }
+.hc-tag.warn { background: color-mix(in srgb, #ff7a6b 20%, transparent); color: #ff7a6b; }
+.hcard.combo { box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--t-acc) 55%, transparent); }
+.hcard.k-vouch b, .hcard.combo b { color: var(--t-acc); }
+.pre.fuzzy .fc b { font-size: 15px; font-family: inherit; }
+.scoutbtn { justify-self: start; margin-top: 2px; border: 1.5px solid var(--t-line); background: none; color: var(--t-ink-2); border-radius: 99px; padding: 4px 12px; font-size: 12px; cursor: pointer; }
+.scoutbtn:hover:not(:disabled) { color: var(--t-acc); border-color: var(--t-acc); }
+.scoutbtn:disabled { opacity: .5; cursor: not-allowed; }
 
 :root[data-skin="sakura"][data-skin] {
   color-scheme: light;
@@ -1110,7 +1122,18 @@ body:has(.fx-amb) { background: transparent !important; }
   "warGoal": 72,
   "calloutSus": 6,
   "officialPosts": 3,
-  "eventsPerRun": 4
+  "eventsPerRun": 4,
+  "combo": {
+   "stagedFuel": 2,
+   "stagedFuelSame": 4,
+   "stagedWar": 1,
+   "stagedRisk": 0.15,
+   "stagedRiskSame": 0.3,
+   "feedRisk": 0.1,
+   "feedRiskSame": 0.25,
+   "vouchSus": 2,
+   "vouchRisk": 0.25
+  }
  },
  "stages": [
   {
@@ -3296,6 +3319,16 @@ body:has(.fx-amb) { background: transparent !important; }
    "@{who} 「{q}」，懂你意思（",
    "@{who} 懂你意思，你这话里有话啊",
    "@{who} 好家伙，懂的都懂"
+  ],
+  "vouch": [
+   "@{who} 人家就正常聊个游戏，怎么就串子了",
+   "@{who} 他我认识，老玩家了，别乱扣帽子",
+   "@{who} 鉴串鉴到正常人头上了，你这雷达该修了",
+   "@{who} 不同意见就是串子？那评论区没正常人了",
+   "@{who} 翻了下他主页，挺正常的啊，别瞎带节奏",
+   "@{who} 你鉴串的样子比他还像串子",
+   "@{who} 这都能扯到串子，别太敏感了",
+   "@{who} 说话直一点就是串？笑死"
   ]
  },
  "events": [
@@ -4994,6 +5027,13 @@ const Engine = (() => {
     }
     return fmt(line, t, s, { kw: kwOf(t.text) });
   }
+  const accusedBy = (p) => p ? (p.accuse || (p.kind === 'callout' ? p.target : null)) : null;
+  // 两个号配合：用一个号回另一个号的评论。同阵营 = 递话，对着干 = 演双簧
+  function comboKind(s, p, accId, stance) {
+    if (!p || p.kind !== 'guogai' || p.author.type !== 'acc' || p.author.id === accId) return null;
+    if (!sign(stance) || !sign(p.stance)) return null;
+    return sign(stance) === sign(p.stance) ? 'feed' : 'staged';
+  }
   const pickT = (s, pool) => { s.usedT = s.usedT || {}; const fresh = pool.filter(x => !s.usedT[x]); const x = pick(s, fresh.length ? fresh : pool); s.usedT[x] = 1; return x; };
   const talk = (arch, sit) => (D.talk[arch] && D.talk[arch][sit]) || null;
   const postLine = (id) => D.posts.find(l => l.id === id);
@@ -5026,14 +5066,18 @@ const Engine = (() => {
       if (!pool.length) pool = Object.values(RX).filter(r => !r.keep && r.topic === 'generic' && r.side === sd && r.lvl === l);
       const r = pickOne(pool); return r ? { kind, id: r.id, side: sd, lvl: l, topic: r.topic } : null;
     };
-    const keep = () => { const all = Object.values(RX).filter(r => r.keep && (r.mode !== 'overread' || !t.overread)); const r = pickOne(all); return r ? { kind: 'keep', id: r.id, mode: r.mode } : null; };
+    const keep = () => { const all = Object.values(RX).filter(r => r.keep && r.mode !== 'vouch' && (r.mode !== 'overread' || !t.overread)); const r = pickOne(all); return r ? { kind: 'keep', id: r.id, mode: r.mode } : null; };
+    const vouch = () => { const all = Object.values(RX).filter(r => r.keep && r.mode === 'vouch'); const r = pickOne(all); return r ? { kind: 'vouch', id: r.id, mode: 'vouch' } : null; };
+    const accused = accusedBy(t);
     let hand;
-    if (t.kind === 'callout') hand = [keep(), keep(), keep()];
+    if (accused && accused !== accId) hand = [vouch(), vouch(), t.kind === 'callout' ? keep() : vouch(), keep()];
+    else if (t.kind === 'callout') hand = [keep(), keep(), keep()];
     else {
       const other = tags.filter(x => x !== topic);
       hand = [card('back', side, lv), card('hit', -side, lv), lv < 3 ? card('up', -side, lv + 1) : card('angle', -side, 2, other.length ? pickOne(other) : 'generic'), keep()];
     }
     const seen = new Set();
+    for (const h of hand) if (h && h.side) h.combo = comboKind(s, t, accId, h.side);
     return hand.filter(h => h && !seen.has(h.id) && seen.add(h.id)).map(h => Object.assign(h, { text: fmt(RX[h.id].text, t, s), topicName: D.topics[h.topic] ? D.topics[h.topic].name : '' }));
   }
 
@@ -5119,20 +5163,22 @@ const Engine = (() => {
       const p = claim(s, act.target);
       if (!p) return { error: '先点选一条评论' };
       if (p.kind !== 'guogai' && p.kind !== 'callout') return { error: D.lines.not_topic };
-      if (p.kind === 'callout' && act.line && replyLine(act.line) && !['overread', 'mock', 'fuel'].includes(replyLine(act.line).mode)) return { error: '回挂人评论只能用「懂你意思」「阴阳」或「起哄」，把它搅成玩梗' };
+      if (p.kind === 'callout' && act.line && replyLine(act.line) && !['overread', 'mock', 'fuel', 'vouch'].includes(replyLine(act.line).mode)) return { error: '回挂人评论只能用「懂你意思」「阴阳」「起哄」或另一个号来洗白' };
       if (rootLocked(s, p.root)) return { error: '这个串已经被锁了' };
       if (!canPost(s, a.id, p.circle)) return { error: `${accName(a.id)}不在${circleName(p.circle)}` };
       const l = replyLine(act.line);
       if (!l) return { error: '选一句回复' };
       if (l.mode === 'rebut' && l.vs !== 'any' && ((l.vs === 'pro' && p.stance <= 0) || (l.vs === 'anti' && p.stance >= 0))) return { error: l.vs === 'pro' ? D.lines.reply_vs_pro : D.lines.reply_vs_anti };
       if (l.mode === 'overread' && p.overread) return { error: '这条已经被强行解读过了' };
+      if (l.mode === 'vouch') { const who = accusedBy(p); if (!who) return { error: '这条没在怀疑你的号，用不着洗白' }; if (who === a.id) return { error: '自己替自己说话没人信，换另一个号来洗白' }; }
       let text = l.gen ? fmt(l.text, p, s) : l.text, stance = 0, ext = l.ext || 0, remixed = false, meme = false, tone = l.tech;
       if (l.mode === 'side') { stance = l.side * 2; ext = l.lvl >= 3 ? 2 : l.lvl - 1; }
       else if (l.mode === 'agree') { stance = p.stance; meme = p.meme; }
       else if (l.mode === 'rebut') { stance = -sign(p.stance || 1) * 2; }
       else if (l.mode === 'mock') { stance = -sign(p.stance || 1) * 2; }
       else if (l.mode === 'remix') { const step = Math.min(s.remixStep + 1, D.remix.length - 1); text = D.remix[step]; stance = 2; ext = 2; remixed = true; meme = step >= 1; }
-      return { circle: p.circle, parent: p.id, core: text, text, stance, ext, tone, meme, remixed, lvl: l.lvl || 0, fuel: l.mode === 'fuel', overread: l.mode === 'overread', summon: l.summon || null, author: { type: 'acc', id: a.id } };
+      if (l.mode === 'vouch') tone = 'sincere';
+      return { circle: p.circle, parent: p.id, core: text, text, stance, ext, tone, meme, remixed, lvl: l.lvl || 0, fuel: l.mode === 'fuel', overread: l.mode === 'overread', vouch: l.mode === 'vouch', summon: l.summon || null, author: { type: 'acc', id: a.id } };
     }
     if (act.type === 'carry') {
       const p = claim(s, act.target);
@@ -5156,6 +5202,12 @@ const Engine = (() => {
       if (a.circles.includes('qun')) return { error: '已经在群里了' };
       a.circles.push('qun'); s.ap--;
       log(s, 'player', `${accName(a.id)}加入了萌新互助群。`);
+      return { ok: true };
+    }
+    if (act.type === 'watch') {
+      if (s.scout === s.turn) return { error: '这一小时已经在观察了' };
+      s.ap--; s.scout = s.turn;
+      log(s, 'player', '你潜水看了一会儿评论区，摸清了这一小时谁好骗、谁精明。');
       return { ok: true };
     }
     if (act.type === 'dm') {
@@ -5192,6 +5244,7 @@ const Engine = (() => {
     }
     s.publicPosts++; s.ap--;
     noteTurnPost(s, a.id, c.root);
+    if (act.type === 'reply') comboEffects(s, a, c, claim(s, c.parent), d);
     c.move = mv;
     const spotN = npc(s, 'c_spot');
     if (used >= 3 && spotN) addClue(s, spotN, a.id, 1, `老用同一套路数（第 ${used} 次）`, false);
@@ -5204,6 +5257,42 @@ const Engine = (() => {
     const verb = act.type === 'post' ? '评论' : act.type === 'reply' ? '回复' : '搬运';
     log(s, 'player', `${accName(a.id)}在${circleName(c.circle)}${verb}：${c.text}`);
     return { ok: true, claim: c.id };
+  }
+
+  // ---------- 两个号配合：递话 / 演双簧 / 洗白 ----------
+  function comboEffects(s, a, c, p, d) {
+    const other = accName(a.id === 'main' ? 'alt' : 'main');
+    const sharp = s.npcs.filter(n => npcDef(n.id).circles.includes(c.circle) && npcDef(n.id).perception >= 3 && !n.left);
+    const caught = (chance, why) => {
+      if (!sharp.length || rand(s) >= chance) return false;
+      const who = [sharp[Math.floor(rand(s) * sharp.length)]];
+      s.link = (s.link || 0) + 1;
+      for (const n of who) for (const id of ['main', 'alt']) addClue(s, n, id, 1, why, false);
+      log(s, 'bad', `${who.map(n => npcDef(n.id).name).join('、')}觉得「${accName('main')}」和「${accName('alt')}」${why}，把两个号记到了一起。`);
+      return true;
+    };
+    const k = comboKind(s, p, a.id, c.stance);
+    const same = p && p.turn === s.turn;
+    const L = (D.level.combo || {});
+    if (k === 'staged') {
+      const r = claim(s, c.root);
+      c.combo = 'staged'; r.fuel += same ? (L.stagedFuelSame || 3) : (L.stagedFuel || 2); r.fight += 1; gainWar(s, L.stagedWar || 1);
+      log(s, 'event', `你用「${accName(a.id)}」跟自己的「${other}」吵了起来——演了一出双簧，这楼的火更旺了。`);
+      caught(same ? (L.stagedRiskSame || 0.4) : (L.stagedRisk || 0.2), '一唱一和，像在演双簧');
+    } else if (k === 'feed') {
+      c.combo = 'feed'; c.signalMod = (c.signalMod || 0) - 1; bump(s, claim(s, c.root), 1);
+      log(s, 'event', `「${accName(a.id)}」接了「${other}」的话，一问一答，看着更像真心话了。`);
+      caught(same ? (L.feedRiskSame || 0.3) : (L.feedRisk || 0.12), '一问一答太默契');
+    } else if (d && d.vouch) {
+      const who = accusedBy(p); if (!who) return;
+      c.combo = 'vouch';
+      const lim = D.level.calloutSus;
+      const before = s.sus[who] || 0;
+      s.sus[who] = Math.max(0, before - (L.vouchSus || 2));
+      if (p.author.type === 'npc') { const an = npc(s, p.author.id); if (an) an.clues[who] = Math.max(0, (an.clues[who] || 0) - 1); }
+      log(s, 'event', `「${accName(a.id)}」站出来替「${accName(who)}」说话，${accName(who)}的嫌疑 ${before} → ${s.sus[who]}。`);
+      caught((L.vouchRisk || 0.3) + (before >= lim - 2 ? 0.15 : 0), '一个被怀疑、另一个马上出来护，像是同一个人');
+    }
   }
 
   // ---------- NPC phase ----------
@@ -5571,6 +5660,7 @@ const Engine = (() => {
     const say = (sit) => { const pool = T(sit); return pool ? fmt(pickT(s, pool), t, s) : null; };
     const hit = (lv, sit) => npcLine(s, def, 'hit', t, lv, T(sit));
     const back = (sit) => npcLine(s, def, 'back', t, 1, T(sit));
+    let accused = null;
     const seenBy = (sit) => { const pool = fromAcc && NT().seen && NT().seen[t.tone]; return pool && rand(s) < 0.55 ? fmt(pickT(s, pool), t, s) : say(sit); };
     // talking back: the player replied directly to this netizen
     const parent = t.parent != null ? claim(s, t.parent) : null;
@@ -5585,13 +5675,13 @@ const Engine = (() => {
     if (!line) switch (def.arch) {
       case 'fan':
         if (res === 'L' && sp > 0) { line = rand(s) < 0.5 ? back(fromAcc ? 'agree_player' : 'agree') : say(fromAcc ? 'agree_player' : 'agree'); stance = 2; }
-        else if (res === 'I' && sp > 0) { line = seenBy('spot'); if (fromAcc) addClue(s, n, t.author.id, 1, '在装' + D.vocab.A + '粉给' + D.vocab.Afans + '招黑', false); }
+        else if (res === 'I' && sp > 0) { line = seenBy('spot'); if (fromAcc) { addClue(s, n, t.author.id, 1, '在装' + D.vocab.A + '粉给' + D.vocab.Afans + '招黑', false); accused = t.author.id; } }
         else if (res === 'L' && sp < 0) { line = hit(1, 'rebut'); stance = 2; }
         break;
       case 'rival':
         if (t.lacai && res !== 'I') { line = rand(s) < 0.5 ? hit(2, 'lacai') : say('lacai'); stance = -2; s.stigma++; gainWar(s, 1); }
         else if (res === 'L' && sp > 0) { line = hit(t.ext >= 2 ? 2 : 1, 'angry'); stance = -2; s.stigma++; }
-        else if (res === 'I' && sp > 0) { line = seenBy('spot'); if (fromAcc) addClue(s, n, t.author.id, 1, '一眼假，像是在串', false); }
+        else if (res === 'I' && sp > 0) { line = seenBy('spot'); if (fromAcc) { addClue(s, n, t.author.id, 1, '一眼假，像是在串', false); accused = t.author.id; } }
         else if (res === 'L' && sp < 0) { line = back('agree'); stance = -2; }
         break;
       case 'hater':
@@ -5602,7 +5692,7 @@ const Engine = (() => {
       case 'spotter':
         if (res === 'I' && fromAcc) {
           const isMain = D.accounts.find(x => x.id === t.author.id).persona === 'sincere';
-          line = isMain ? say('call_main') : seenBy('call'); addClue(s, n, t.author.id, 1, '的发言一看就是在串', false);
+          line = isMain ? say('call_main') : seenBy('call'); addClue(s, n, t.author.id, 1, '的发言一看就是在串', false); accused = t.author.id;
         }
         break;
       case 'echo': {
@@ -5629,7 +5719,8 @@ const Engine = (() => {
         break;
     }
     if (!line) return false;
-    npcReply(s, n, t, line, stance, { crowd: true, duel: !!ctx.duel, lvl: ctx.duel ? (ctx.lvl || 1) : 0, meme: def.arch === 'echo' && s.flags.memeBorn && D.remix.includes(line) });
+    const rc = npcReply(s, n, t, line, stance, { crowd: true, duel: !!ctx.duel, lvl: ctx.duel ? (ctx.lvl || 1) : 0, meme: def.arch === 'echo' && s.flags.memeBorn && D.remix.includes(line) });
+    if (accused) rc.accuse = accused;
     if (ctx.duel) { claim(s, t.root).fight++; if (ctx.lvl !== 0 && t.stance !== 0) gainWar(s, 1); if (fromAcc) grudgeUp(s, def.id, t.author.id); ctx.duel = false; }
     n.involved = true;
     ctx.acted[def.id] = true;
@@ -5843,6 +5934,7 @@ const Engine = (() => {
       } else {
         a.exposed = true;
         log(s, 'bad', `挂人评论被顶到了最热，${accName(a.id)}被实锤是串子。`);
+        if (s.link) { const o = a.id === 'main' ? 'alt' : 'main'; const add = 1 + s.link; s.sus[o] = (s.sus[o] || 0) + add; log(s, 'bad', `两个号之前被人记到了一起，「${accName(o)}」跟着被扒，嫌疑 +${add}。`); }
       }
     }
   }
@@ -5986,7 +6078,7 @@ const Engine = (() => {
   return {
     init, newGame, applyPlayer, endTurn, intents, decodePreview, draftClaim, forecast, replyHand, topicsOf,
     threadHeat, circleMainstream, weights, stageReached, leverage, canPost, maxThreadHeat,
-    helpers: { npcDef, accName, circleName, claim, acc, npc, circ, signalOf }
+    helpers: { npcDef, accName, circleName, claim, acc, npc, circ, signalOf, accusedBy, comboKind }
   };
 })();
 // ENGINE END
@@ -6260,7 +6352,7 @@ function voices() {
 const TUT = [
   { title: '发第一条评论', text: '点这里，用主号发第一条评论。', on: 'openCompose', hl: 'box' },
   { title: '选一种话术', text: `点<b>「拉踩」</b>：装成${esc(V.A)}老粉去踩${esc(V.B)}。只要${esc(V.Bfans)}当真，这楼就会烧起来。`, on: 'tech', hl: 'techs' },
-  { title: '挑一句话', text: '点一句台词。挑好之后看下面的<b>「预计效果」</b>：能加多少战火、嫌疑会涨到多少、会不会被看穿。', on: 'line', hl: 'cands' },
+  { title: '挑一句话', text: '点一句台词。挑好之后看下面的<b>「大概会怎样」</b>：火能不能点着、会不会更可疑。想看精确数字，可以花 1 点行动力<b>潜水观察</b>。', on: 'line', hl: 'cands' },
   { title: '发出去', text: '点<b>「发送」</b>。每条花 1 点行动力，每小时 2 点。', on: 'post', hl: 'send' },
   { title: '进入下一小时', text: '点<b>「下一小时」</b>，看两家玩家怎么回你。', on: 'end', hl: 'next' },
   { title: '有人 @ 你了', text: '点<b>「消息」</b>，所有回你、怼你、挂你的人都在这里。', on: 'inbox', hl: 'inbox' },
@@ -6277,6 +6369,9 @@ function hints() {
   const fighting = S.claims.filter(c => c.duel && c.parent != null && H.claim(S, c.parent).author.type === 'acc' && c.turn === S.turn - 1);
   if (fighting.length) out.push(`<b>${esc(who(fighting[0]).name)}</b>正在跟你对线。点他那条的「回复」接着怼、或者用「起哄」拱火，战火值涨得最快。`);
   else if (S.claims.length && S.war < DATA.level.warGoal / 2) out.push(`战火值 ${S.war}/${DATA.level.warGoal}。<b>点火</b>要靠对面当真的伪装：拉踩、捧杀、钓鱼、假中立。起哄、阴阳、懂你意思只能让<b>已经吵起来</b>的楼接着吵。`);
+  const accused = S.claims.filter(c => c.turn >= S.turn - 1 && H.accusedBy(c) && !H.acc(S, H.accusedBy(c)).exposed).pop();
+  if (accused) out.push(`有人在怀疑「${esc(H.accName(H.accusedBy(accused)))}」。用<b>另一个号</b>回他那条，能<b>洗白</b>（嫌疑 −2），但两个号可能被看出是一伙。`);
+  else if (S.turn >= 2 && !S.claims.some(c => c.combo) && S.claims.some(c => c.author.type === 'acc' && c.kind === 'guogai')) out.push('试试<b>两个号配合</b>：用另一个号回复自己的评论。站他那边是<b>递话</b>（更像真心话），怼他是<b>演双簧</b>（火最旺，但同一小时更容易被看出来）。');
   if (S.claims.some(c => c.author.type === 'acc') && S.turn <= 3) out.push('两个号各演一个人设更安全：比如主号一直挺一边、小号一直挺另一边。同一个号一小时只说一句，前后立场别打架。');
   if (!S.flags.streamed && S.claims.length && out.length < 2) {
     if (mh >= DATA.level.streamHeatPrivate) out.push(`最热的评论已经 ${mh} 度。<b>私信或 @${esc(NM('gouge'))}</b>，能撺掇他提前开播。`);
@@ -6438,14 +6533,31 @@ function preread() {
       .map(([k, w]) => `<span><span class="${k}">${g[k].length} 人${w}</span>：${esc(g[k].join('、'))}</span>`).join('');
     if (ui.showMath) det += `<div class="math">${pv.rows.map(r => r.r.val == null ? `<span>${esc(r.name)}：${esc(r.r.note || '')}</span>` : `<span>${esc(r.name)}：识别 ${r.perception} + 信号 ${r.r.sig.base}${r.r.bias ? ' − 偏向 1' : ''} = ${r.r.val}</span>`).join('')}<span>≥5 看穿 · ≤3 当真 · 4 拿不准</span></div>`;
   }
-  return `<div class="pre" data-guide="pre"><div class="h"><span>预计效果（把下一小时模拟了 ${f.n} 遍）</span></div>
+  const scouted = S.scout === S.turn;
+  const ign = (() => { const rf = riskFlags(action); return `<span class="ign ${rf.keep ? 'keep' : 'lit'}">${rf.keep ? '只能续火：不站队、明嘲和“懂你意思”点不着新的吵架，只能让已经吵起来的楼接着吵' : '能点火：对面阵营的人要是当真了，这楼就会烧起来；被看穿就点不着'}</span>${rf.out.length ? `<ul class="risk">${rf.out.map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : ''}`; })();
+  const whoLine = whoL ? `<span class="whol">大概率会回你：${whoL}</span>` : '<span class="whol dim">可能没人接你的话</span>';
+  if (!scouted) {
+    const w = f.warAvg;
+    const wT = w < 0.5 ? ['点不着', 'dim'] : w < 2.5 ? ['小火苗', ''] : w < 5.5 ? ['能烧起来', 'good'] : ['要炸了', 'good'];
+    const sT = s1 >= lim ? ['会被挂', 'bad'] : s1 >= lim - 2 ? ['很危险', 'bad'] : s1 > cur ? ['会更可疑', 'warn'] : ['安全', ''];
+    const rT = risk === 0 ? ['几乎不会', ''] : risk < 30 ? ['有可能', 'warn'] : ['很可能', 'bad'];
+    return `<div class="pre fuzzy" data-guide="pre"><div class="h"><span>大概会怎样（凭感觉）</span></div>
+    <div class="fc">
+      <div class="${wT[1]}"><small>战火</small><b>${wT[0]}</b></div>
+      <div class="${sT[1]}"><small>${ui.acc === 'main' ? '主号' : '小号'}嫌疑</small><b>${sT[0]}</b></div>
+      <div class="${rT[1]}"><small>被挂</small><b>${rT[0]}</b></div>
+    </div>
+    ${ign}${whoLine}
+    <button type="button" class="scoutbtn" data-act="scout" ${S.ap < 2 ? 'disabled' : ''}>${S.ap < 2 ? '潜水观察要留 1 点行动力给发言，现在不够' : '潜水观察（花 1 点行动力）：这一小时看精确数字、谁会当真谁会看穿'}</button>
+  </div>`;
+  }
+  return `<div class="pre" data-guide="pre"><div class="h"><span>精确预测（已潜水观察 · 把下一小时模拟了 ${f.n} 遍）</span></div>
     <div class="fc">
       <div class="${warCls}"><small>战火</small><b>${span(f.warRange.map(x => Math.max(0, x)), true)}</b></div>
       <div class="${susCls}"><small>${ui.acc === 'main' ? '主号' : '小号'}嫌疑</small><b>${cur} → ${span([s0, s1])}</b><small>/ ${lim}</small></div>
       <div class="${risk >= 30 ? 'bad' : risk > 0 ? 'warn' : ''}"><small>被挂风险</small><b>${risk}%</b></div>
     </div>
-    ${(() => { const rf = riskFlags(action); return `<span class="ign ${rf.keep ? 'keep' : 'lit'}">${rf.keep ? '只能续火：不站队、明嘲和“懂你意思”点不着新的吵架，只能让已经吵起来的楼接着吵' : '能点火：对面阵营的人要是当真了，这楼就会烧起来；被看穿就点不着'}</span>${rf.out.length ? `<ul class="risk">${rf.out.map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : ''}`; })()}
-    ${whoL ? `<span class="whol">大概率会回你：${whoL}</span>` : '<span class="whol dim">可能没人接你的话</span>'}
+    ${ign}${whoLine}
     ${det ? `<button class="fold" data-act="who" aria-expanded="${ui.showWho}">${ui.showWho ? '收起' : '谁会当真、谁会看穿'}</button>${ui.showWho ? `<div class="det">${det}<button class="fold" data-act="math">${ui.showMath ? '收起算式' : '看算式'}</button></div>` : ''}` : ''}
   </div>`;
 }
@@ -6471,13 +6583,15 @@ function composeHTML() {
     const isGen = (id) => /^[tk]:/.test(id || '');
     if (!ui.moreReplies && (!ui.rline || (isGen(ui.rline) && !hand.some(h => h.id === ui.rline)) || !isGen(ui.rline)) && hand.length) ui.rline = hand[0].id;
     const sideName = (x) => x > 0 ? V.proStance : V.antiStance;
-    const KIND = { back: '站他那边', hit: '怼他', up: '怼得更狠', angle: '换个角度怼' };
+    const KIND = { back: '站他那边', hit: '怼他', up: '怼得更狠', angle: '换个角度怼', vouch: '洗白' };
     const KEEP = { fuel: '起哄', mock: '阴阳', overread: '懂你意思' };
+    const COMBO = { feed: '递话', staged: '演双簧' };
     const cards = hand.map(h => {
-      const head = h.kind === 'keep' ? KEEP[h.mode] : KIND[h.kind];
-      const tags = h.kind === 'keep' ? '<span class="hc-tag keep">只能续火</span>'
-        : `<span class="hc-tag s${h.side > 0 ? 'a' : 'b'}">${esc(sideName(h.side))}</span><span class="hc-tag l${h.lvl}">${['', '讲道理', '阴阳', '上升'][h.lvl]}</span>${h.topicName ? `<span class="hc-tag">${esc(h.topicName)}</span>` : ''}<span class="hc-tag lit">能点火</span>`;
-      return `<button type="button" class="hcard k-${h.kind} ${h.side > 0 ? 'sa' : h.side < 0 ? 'sb' : ''}" data-set="rline" data-v="${esc(h.id)}" aria-pressed="${ui.rline === h.id}"><b>${esc(head)}</b><span class="hc-t">${esc(h.text)}</span><span class="hc-tags">${tags}</span></button>`;
+      const head = h.combo ? `${COMBO[h.combo]} · ${KIND[h.kind]}` : h.kind === 'keep' ? KEEP[h.mode] : KIND[h.kind];
+      const tags = h.kind === 'vouch' ? '<span class="hc-tag combo">另一个号嫌疑 −2</span><span class="hc-tag warn">可能被看出是一伙</span>'
+        : h.kind === 'keep' ? '<span class="hc-tag keep">只能续火</span>'
+        : `<span class="hc-tag s${h.side > 0 ? 'a' : 'b'}">${esc(sideName(h.side))}</span><span class="hc-tag l${h.lvl}">${['', '讲道理', '阴阳', '上升'][h.lvl]}</span>${h.topicName ? `<span class="hc-tag">${esc(h.topicName)}</span>` : ''}<span class="hc-tag lit">能点火</span>${h.combo === 'staged' ? '<span class="hc-tag combo">火更旺</span>' : h.combo === 'feed' ? '<span class="hc-tag combo">更像真心话</span>' : ''}`;
+      return `<button type="button" class="hcard k-${h.kind} ${h.combo ? 'combo c-' + h.combo : ''} ${h.side > 0 ? 'sa' : h.side < 0 ? 'sb' : ''}" data-set="rline" data-v="${esc(h.id)}" aria-pressed="${ui.rline === h.id}"><b>${esc(head)}</b><span class="hc-t">${esc(h.text)}</span><span class="hc-tags">${tags}</span></button>`;
     }).join('');
     const canReroll = !ui.reroll[rkey];
     // the classic menu (fixed lines, @叫人, 二创) stays available under a fold
@@ -6494,7 +6608,17 @@ function composeHTML() {
       more = `<div class="row"><div class="chips">${rm}</div><p class="desc">${esc(DATA.replyModes.find(m => m.id === ui.rmode).desc)}</p></div><div class="cands">${list}</div>`;
     }
     const tTopics = Engine.topicsOf(tgt ? tgt.text : '').map(k => DATA.topics[k].name);
-    body = `<div class="row"><span class="lbl">你的手牌${tTopics.length ? `（他在说：${esc(tTopics.join('、'))}）` : ''}</span><div class="hand" data-guide="cands">${cards}</div>
+    const otherAcc = (id) => id === 'main' ? 'alt' : 'main';
+    let duo = '';
+    const accused = tgt && H.accusedBy(tgt);
+    if (accused && accused !== ui.acc) duo = `<div class="duo"><b>洗白</b>他在怀疑你的另一个号「${esc(AN(accused))}」。用「${esc(AN(ui.acc))}」替他说话，能把他的嫌疑降 2；但两个号可能被看出是一伙的，一个被扒另一个也跟着遭殃。</div>`;
+    else if (accused && accused === ui.acc) duo = `<div class="duo"><b>提示</b>他在怀疑的就是这个号。自己替自己说话没人信，换「${esc(AN(otherAcc(ui.acc)))}」来回能洗白。</div>`;
+    else if (tgt && tgt.author.type === 'acc' && tgt.kind === 'guogai') {
+      duo = tgt.author.id === ui.acc
+        ? `<div class="duo"><b>两个号配合</b>这是这个号自己的评论。换「${esc(AN(otherAcc(ui.acc)))}」来回：站他那边是<b>递话</b>，怼他是<b>演双簧</b>。</div>`
+        : `<div class="duo"><b>两个号配合</b>这是你另一个号「${esc(AN(tgt.author.id))}」的评论。<b>站他那边 = 递话</b>：这句更像真心话，楼更热。<b>怼他 = 演双簧</b>：自己跟自己吵起来，火最旺。${tgt.turn === S.turn ? '同一小时接话效果最好，但更容易被看出来，UP主还会查小号。' : '隔了一小时再接比较安全，效果也弱一些。'}</div>`;
+    }
+    body = `${duo}<div class="row"><span class="lbl">你的手牌${tTopics.length ? `（他在说：${esc(tTopics.join('、'))}）` : ''}</span><div class="hand" data-guide="cands">${cards}</div>
       <div class="hand-ft"><button type="button" class="linkbtn" data-act="reroll" ${canReroll ? '' : 'disabled'}>${canReroll ? '换一批（这小时还能换 1 次）' : '这一小时已经换过了'}</button><button type="button" class="linkbtn" data-act="moreReplies">${ui.moreReplies ? '收起其他回法' : '其他回法：@叫人、二创加码、固定台词'}</button></div></div>${more}`;
   } else if (ui.mode === 'carry') {
     const circles = DATA.circles.filter(c => !H.circ(S, c.id).locked && (!t || c.id !== t.circle)).map(c => chip('carryTo', c.id, c.name, ui.carryTo === c.id, { disabled: !Engine.canPost(S, ui.acc, c.id), title: !Engine.canPost(S, ui.acc, c.id) ? '这个号不在这里' : '' })).join('');
@@ -6920,7 +7044,11 @@ function openCompose(mode, targetId, circle) {
   ui.err = ''; ui.mode = mode; ui.target = targetId || null; ui.showMath = false;
   if (mode === 'post') { ui.circle = circle || ui.circle; fixAccount(ui.circle); }
   const t = ui.target && H.claim(S, ui.target);
-  if (t && mode === 'reply') { fixAccount(t.circle); ui.rline = null; ui.moreReplies = false; }
+  if (t && mode === 'reply') {
+    fixAccount(t.circle); ui.rline = null; ui.moreReplies = false;
+    const own = t.author.type === 'acc' ? t.author.id : H.accusedBy(t);
+    if (own) { const o = S.accounts.find(x => x.id !== own && !x.exposed && Engine.canPost(S, x.id, t.circle)); if (o) ui.acc = o.id; }
+  }
   if (t && mode === 'carry') { const to = DATA.circles.map(c => c.id).find(id => id !== t.circle && !H.circ(S, id).locked && S.accounts.some(a => Engine.canPost(S, a.id, id))) || DATA.circles.map(c => c.id).find(id => id !== t.circle && !H.circ(S, id).locked); if (to) { ui.carryTo = to; fixAccount(to); } }
   ui.swapNote = '';
   const lim = DATA.level.calloutSus, cur = S.sus[ui.acc] || 0;
@@ -6949,6 +7077,7 @@ document.addEventListener('click', (ev) => {
   const b = ev.target.closest('[data-act]');
   if (!b) return;
   const a = b.dataset.act, id = b.dataset.id;
+  if (a === 'scout') { const r = Engine.applyPlayer(S, { type: 'watch', acc: ui.acc }); if (r.error) toast(esc(r.error)); else { ui.showWho = true; toast('潜水观察中：这一小时的预测变精确了'); } render(); return; }
   if (a === 'skin') { if (dialog === 'play' || dialog === 'compose') return; dialog = 'skin'; render(); return; }
   if (a === 'setSkin') { setSkin(id); render(); return; }
   if (a === 'closeCompose-bg') { if (ev.target === b) { dialog = null; if (tut >= 1 && tut <= 3) tut = 0; render(); } return; }
@@ -7141,7 +7270,10 @@ render();
       const r = b.getBoundingClientRect();
       burst(ev.clientX || r.left + r.width / 2, ev.clientY || r.top + r.height / 2, 16);
       const last = S.claims[S.claims.length - 1];
-      pick([['发出去啦☆', 'happy'], ['嘿嘿，看谁先上钩～', 'smug'], ['坐等对线～', 'smug'], ['这句够阴阳吧（', 'wink']]);
+      if (last && last.combo === 'staged') { say('演双簧！<br>自己跟自己吵起来啦～', 'smug'); if (!RM()) cutin('左右互搏！', '演双簧', 'lv2', 900); }
+      else if (last && last.combo === 'feed') say('递话成功～<br>一问一答，像真的一样', 'wink');
+      else if (last && last.combo === 'vouch') say('帮另一个号说了句好话…<br>希望没人看出来（', 'shock');
+      else pick([['发出去啦☆', 'happy'], ['嘿嘿，看谁先上钩～', 'smug'], ['坐等对线～', 'smug'], ['这句够阴阳吧（', 'wink']]);
       if (last && last.parent == null) setTimeout(() => { const el = document.querySelector('.cm.flash'); if (el) el.classList.add('fx-new'); }, 30);
     }
     if (a === 'end' && dialog === 'play' && play && !RM()) {
