@@ -839,6 +839,35 @@ body:has(.fx-amb) { background: transparent !important; }
 .fic-note { flex: none; margin: 0; padding: 6px 18px 0; font-size: 11.5px; color: var(--t-ink-3); }
 @media (max-width: 560px) { .fictag { font-size: 10px; padding: 0 6px; } }
 html { overflow-x: clip; }
+/* mobile fixes: join button stays visible, bottom bar never overflows */
+.box.joinbox { grid-template-columns: 32px minmax(0, 1fr) auto; }
+@media (max-width: 560px) {
+  .box.joinbox { grid-template-columns: 32px minmax(0, 1fr); }
+  .box.joinbox .sbtn { display: inline-block !important; grid-column: 2; justify-self: start; }
+  .mbar { gap: 8px; padding-left: max(10px, env(safe-area-inset-left, 0px)); padding-right: max(10px, env(safe-area-inset-right, 0px)); }
+  .mbar .time { font-size: 16px; flex: none; }
+  .mbar .sub { flex: 1 1 auto; min-width: 0; overflow: hidden; }
+  .mbar .sub > span { display: block; overflow: hidden; text-overflow: ellipsis; }
+  .mbar .jump { flex: none; padding: 6px 8px; }
+  .mbar .t-next { flex: none; padding: 8px 12px; font-size: 14px; }
+  .mbar .t-ap i { width: 8px; height: 8px; }
+}
+@media (max-width: 350px) {
+  .mbar .time .mnews { display: none; }
+  .mbar .jump { padding: 6px 6px; font-size: 12px; }
+  .mbar .t-next { padding: 8px 10px; font-size: 13px; }
+}
+@media (max-width: 560px) {
+  .nav-in { gap: 8px; }
+  .logo { font-size: 16px; }
+  .fictag .fl { display: none; }
+  .skinbtn, .msgbtn { padding: 6px 4px; }
+}
+@media (max-width: 1060px) {
+  #mascot { transition: opacity .3s, transform .35s cubic-bezier(.3, 1.4, .5, 1); }
+  #mascot:not(.talk) { opacity: 0; transform: translateY(40px); }
+  #mascot:not(.talk) .m-body { pointer-events: none; }
+}
 
 :root[data-skin="sakura"][data-skin] {
   color-scheme: light;
@@ -6399,7 +6428,7 @@ const unread = () => inbox().filter(c => c.id > ui.seen).length;
 function renderNav() {
   const a = DATA.accounts.find(x => x.id === ui.acc);
   const n = unread();
-  $('nav').innerHTML = `<span class="logo"><i></i>叽哩站</span><span class="fictag" title="这是游戏画面，并非真实网站">游戏画面 · 虚构平台</span><span class="search">${IC.search}<span>${esc(V.search)}</span></span>
+  $('nav').innerHTML = `<span class="logo"><i></i>叽哩站</span><span class="fictag" title="这是游戏画面，并非真实网站"><span class="fl">游戏画面 · </span>虚构平台</span><span class="search">${IC.search}<span>${esc(V.search)}</span></span>
     <button class="skinbtn" data-act="skin" aria-label="换界面风格"><i></i><span>换肤</span></button>
     <button class="msgbtn" data-act="inbox" data-guide="inbox" aria-label="回复我的${n ? `，${n} 条新消息` : ''}">${IC.bell}<span>消息</span>${n ? `<b>${n > 99 ? '99+' : n}</b>` : ''}</button>
     <span class="me-chip"><span>已登录 ${esc(a.name)}</span><img src="${avatar(a.seed)}" alt=""></span>`;
@@ -6480,7 +6509,7 @@ function renderCommunity() {
         <div class="bubble ${c.signalMod < 0 ? 'shot' : ''}">${atPrefix(c)}${esc(cleanText(c.text))}</div>${metaRow(c, inGroup)}</div></div>`;
     }).join('') || `<p class="empty">群里在聊别的。萌新们大多什么都信。</p>`;
     body = `<div class="chat" id="chatbox">${chat}</div>` + (inGroup ? inputBox('qun', '发消息…') :
-      `<div class="box"><img src="${avatar(DATA.accounts[1].seed)}" alt=""><span class="ink2" style="font-size:13px">你的小号还不在群里。「${esc(NM('agen'))}」会把评论区的帖子截图搬进来。</span><button class="sbtn" data-act="join" ${S.ap < 1 || S.over ? 'disabled' : ''}>加群（1 点）</button></div>`);
+      `<div class="box joinbox"><img src="${avatar(DATA.accounts[1].seed)}" alt=""><span class="ink2" style="font-size:13px">你的小号还不在群里。「${esc(NM('agen'))}」会把评论区的帖子截图搬进来。</span><button class="sbtn" data-act="join" ${S.ap < 1 || S.over ? 'disabled' : ''}>加群（1 点）</button></div>`);
   } else {
     if (off.locked) body = `<div class="lockpage"><b>${esc(V.emptyOfficial)}</b><span>主播开播之后，会把话题带到这里。</span></div>`;
     else {
@@ -6654,7 +6683,7 @@ function renderTerm() {
     ${guide}
     <div class="t-sec" data-guide="people"><div class="ptabs" role="tablist"><button role="tab" aria-selected="${ui.pp === 'people'}" data-act="pp" data-id="people">关键人物</button><button role="tab" aria-selected="${ui.pp === 'crowd'}" data-act="pp" data-id="crowd">其他网友</button><button role="tab" aria-selected="${ui.pp === 'log'}" data-act="pp" data-id="log">记录</button></div><div class="plist">${plist}</div></div>`;
   const sm = (a) => `<span class="${(S.sus[a] || 0) >= DATA.level.calloutSus - 2 ? 'hot' : ''}">${S.sus[a] || 0}</span>`;
-  $('mbar').innerHTML = `<span class="time">${hh(S.turn)}${newsNow() ? `<em class="mnews">${esc(newsNow().tag)}</em>` : ''}</span><span class="sub"><span>战火 <b class="fire">${S.war}</b>/${DATA.level.warGoal} · 行动力 ${apDots()}</span><span>嫌疑 主号 ${sm('main')} · 小号 ${sm('alt')} / ${DATA.level.calloutSus}</span></span><button class="jump" data-act="toTerm">终端</button><button class="t-next" data-act="end" data-guide="next" ${S.over || dialog === 'play' ? 'disabled' : ''}>下一小时 ▶</button>`;
+  $('mbar').innerHTML = `<span class="time">${hh(S.turn)}${newsNow() ? `<em class="mnews">${esc(newsNow().tag)}</em>` : ''}</span><span class="sub"><span>战火 <b class="fire">${S.war}</b>/${DATA.level.warGoal} ${apDots()}</span><span>嫌疑 主${sm('main')} · 小${sm('alt')} /${DATA.level.calloutSus}</span></span><button class="jump" data-act="toTerm" aria-label="跳到串子终端">终端</button><button class="t-next" data-act="end" data-guide="next" ${S.over || dialog === 'play' ? 'disabled' : ''}>下一小时 ▶</button>`;
 }
 
 function taskDef() { return S.task && (DATA.tasks || []).find(t => t.id === S.task); }
@@ -7414,7 +7443,8 @@ render();
     let k = 0; const n = Math.min(24, text.replace(/<[^>]+>/g, '').length);
     if (!RM()) talkT = setInterval(() => { draw(k % 2 === 0, false); if (++k > n) { clearInterval(talkT); talkT = null; draw(false, false); } }, 85);
     else draw(false, false);
-    hideT = setTimeout(() => box.classList.remove('on'), ms || Math.max(2600, n * 140 + 1400));
+    mas.classList.add('talk');
+    hideT = setTimeout(() => { box.classList.remove('on'); mas.classList.remove('talk'); }, ms || Math.max(2600, n * 140 + 1400));
   }
   const TIPS = ['两个号说话的口气要不一样哦～', '对面信了你的话，才算点着火！', '一个号刷屏会被盯上的，换着来～', '嫌疑高了就潜水一小时，会慢慢降～', '被人@了？看「消息」里的牌，挑一张回！', '同一个招式用太多次会被看穿哦'];
   $id('m-body').addEventListener('click', () => say(TIPS[Math.floor(Math.random() * TIPS.length)], 'wink'));
