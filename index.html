@@ -834,6 +834,11 @@ body:has(.fx-amb) { background: transparent !important; }
 .b-task { display: grid; gap: 2px; padding: 10px 12px; border-radius: 12px; background: color-mix(in srgb, var(--t-acc) 12%, var(--t-bg-2)); border: 1.5px dashed color-mix(in srgb, var(--t-acc) 60%, transparent); font-size: 13px; color: var(--t-ink-2); }
 .b-task b { color: var(--t-acc); font-size: 14px; } .b-task small { font-size: 11.5px; color: var(--t-ink-3); }
 .friend { margin-left: 6px; font-size: 10.5px; font-weight: 800; padding: 0 7px; border-radius: 99px; background: color-mix(in srgb, #2fbf7f 20%, transparent); color: #2fbf7f; }
+/* fiction disclaimers (Toy platform rule: mark imitation apps clearly) */
+.fictag { flex: none; font-size: 11px; font-weight: 700; color: var(--ink-3); border: 1px solid var(--line); border-radius: 99px; padding: 1px 8px; white-space: nowrap; }
+.fic-note { flex: none; margin: 0; padding: 6px 18px 0; font-size: 11.5px; color: var(--t-ink-3); }
+@media (max-width: 560px) { .fictag { font-size: 10px; padding: 0 6px; } }
+html { overflow-x: clip; }
 
 :root[data-skin="sakura"][data-skin] {
   color-scheme: light;
@@ -6394,7 +6399,7 @@ const unread = () => inbox().filter(c => c.id > ui.seen).length;
 function renderNav() {
   const a = DATA.accounts.find(x => x.id === ui.acc);
   const n = unread();
-  $('nav').innerHTML = `<span class="logo"><i></i>叽哩站</span><span class="search">${IC.search}<span>${esc(V.search)}</span></span>
+  $('nav').innerHTML = `<span class="logo"><i></i>叽哩站</span><span class="fictag" title="这是游戏画面，并非真实网站">游戏画面 · 虚构平台</span><span class="search">${IC.search}<span>${esc(V.search)}</span></span>
     <button class="skinbtn" data-act="skin" aria-label="换界面风格"><i></i><span>换肤</span></button>
     <button class="msgbtn" data-act="inbox" data-guide="inbox" aria-label="回复我的${n ? `，${n} 条新消息` : ''}">${IC.bell}<span>消息</span>${n ? `<b>${n > 99 ? '99+' : n}</b>` : ''}</button>
     <span class="me-chip"><span>已登录 ${esc(a.name)}</span><img src="${avatar(a.seed)}" alt=""></span>`;
@@ -7069,7 +7074,7 @@ function renderOverlay() {
       ${taskDef() ? `<div class="b-task"><b>本局委托 · ${esc(taskDef().name)}</b><span>${esc(taskText(taskDef()))}</span><small>赢了且完成，评级 +1</small></div>` : ''}
       <div class="skinrow"><span>界面风格</span>${skinChips()}</div>
       <div class="b-accs"><div><img src="${avatar(am.seed)}" alt=""><span><b>${esc(am.name)}</b>主号 · 老玩家，大家默认他说真心话</span></div><div><img src="${avatar(aa.seed)}" alt=""><span><b>${esc(aa.name)}</b>小号 · 新号，说什么都容易被怀疑</span></div></div>
-      </div><div class="m-foot"><span class="tip">两家玩家互怼得越凶，战火涨得越快。</span><button class="go go-lg" data-act="briefGo">开始任务 ▶</button></div></div></div>`;
+      </div><p class="fic-note">本游戏中的视频网站、游戏、人物均为虚构，与现实无关。现实里请勿当串子。</p><div class="m-foot"><span class="tip">两家玩家互怼得越凶，战火涨得越快。</span><button class="go go-lg" data-act="briefGo">开始任务 ▶</button></div></div></div>`;
     return;
   }
   if (dialog === 'inbox') {
