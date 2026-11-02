@@ -817,6 +817,23 @@ body:has(.fx-amb) { background: transparent !important; }
 .scoutbtn { justify-self: start; margin-top: 2px; border: 1.5px solid var(--t-line); background: none; color: var(--t-ink-2); border-radius: 99px; padding: 4px 12px; font-size: 12px; cursor: pointer; }
 .scoutbtn:hover:not(:disabled) { color: var(--t-acc); border-color: var(--t-acc); }
 .scoutbtn:disabled { opacity: .5; cursor: not-allowed; }
+/* repair tools + commissions */
+.ctext.deleted, .rtext.deleted { color: var(--ink-3); font-style: italic; }
+.delbtn { color: var(--ink-3) !important; }
+.delbtn.armed { color: #fff !important; background: var(--warn) !important; border-radius: 99px; padding: 1px 10px !important; font-weight: 700; }
+.wl-sub { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: -2px 0 2px 72px; font-size: 11px; color: var(--t-ink-3); }
+.mini { border: 1.5px solid var(--t-line); background: none; color: var(--t-ink-2); border-radius: 99px; padding: 1px 9px; font-size: 11px; cursor: pointer; white-space: nowrap; }
+.mini:hover:not(:disabled) { color: var(--t-acc); border-color: var(--t-acc); }
+.mini:disabled { opacity: .45; cursor: not-allowed; }
+.wl-h.task { color: var(--t-acc); margin-top: 6px; display: flex; align-items: center; gap: 6px; }
+.tk { font-size: 10.5px; padding: 0 7px; border-radius: 99px; background: var(--t-bg-2); color: var(--t-ink-3); letter-spacing: 0; }
+.tk.done { background: #2fbf7f; color: #fff; } .tk.fail { background: #ff7a6b; color: #fff; }
+.task-row { font-size: 12.5px; color: var(--t-ink-2); display: grid; gap: 1px; padding: 6px 10px; border-radius: 10px; background: var(--t-bg-2); }
+.task-row b { color: var(--t-ink); font-size: 13px; } .task-row small { font-size: 11px; color: var(--t-ink-3); }
+.task-row.end.done { box-shadow: inset 0 0 0 2px #2fbf7f; } .task-row.end.done small { color: #2fbf7f; font-weight: 800; }
+.b-task { display: grid; gap: 2px; padding: 10px 12px; border-radius: 12px; background: color-mix(in srgb, var(--t-acc) 12%, var(--t-bg-2)); border: 1.5px dashed color-mix(in srgb, var(--t-acc) 60%, transparent); font-size: 13px; color: var(--t-ink-2); }
+.b-task b { color: var(--t-acc); font-size: 14px; } .b-task small { font-size: 11.5px; color: var(--t-ink-3); }
+.friend { margin-left: 6px; font-size: 10.5px; font-weight: 800; padding: 0 7px; border-radius: 99px; background: color-mix(in srgb, #2fbf7f 20%, transparent); color: #2fbf7f; }
 
 :root[data-skin="sakura"][data-skin] {
   color-scheme: light;
@@ -1133,6 +1150,14 @@ body:has(.fx-amb) { background: transparent !important; }
    "feedRiskSame": 0.25,
    "vouchSus": 2,
    "vouchRisk": 0.25
+  },
+  "repair": {
+   "deleteSus": 1,
+   "deleteRisk": 0.35,
+   "deleteRisk2": 0.6,
+   "friendAt": 2,
+   "friendChance": 0.75,
+   "credMax": 1
   }
  },
  "stages": [
@@ -4817,8 +4842,73 @@ body:has(.fx-amb) { background: transparent !important; }
    "举报了，别吵了",
    "这楼建议锁了，已举报",
    "说话这么脏，已举报"
+  ],
+  "deleted": [
+   "@{who} 删了？截图了，跑不掉的",
+   "@{who} 删评跑路，懂了",
+   "@{who} 刚才还挺能说，怎么删了",
+   "@{who} 心虚了？",
+   "@{who} 删得挺快啊，可惜我手更快",
+   "@{who} 删评=默认"
+  ],
+  "defend": [
+   "@{who} 他我认识，正常玩家，别乱扣帽子",
+   "@{who} 鉴串鉴到我兄弟头上了？",
+   "@{who} 人家一直这么说话的，你才是来带节奏的吧",
+   "@{who} 他跟我一边的，串什么串",
+   "@{who} 别什么人都往串子上套行吗",
+   "@{who} 我替他担保，正常人",
+   "@{who} 你是不是鉴串鉴魔怔了",
+   "@{who} 他之前帮我说过话，我信他"
   ]
- }
+ },
+ "tasks": [
+  {
+   "id": "meme",
+   "name": "梗王",
+   "desc": "让「{meme}」成梗"
+  },
+  {
+   "id": "staged2",
+   "name": "左右互搏",
+   "desc": "演至少两次双簧"
+  },
+  {
+   "id": "clean",
+   "name": "片叶不沾身",
+   "desc": "赢，且两个号嫌疑始终不超过 4"
+  },
+  {
+   "id": "mainOnly",
+   "name": "独狼",
+   "desc": "赢，且全程不用小号说话"
+  },
+  {
+   "id": "qun",
+   "name": "祸水东引",
+   "desc": "让萌新粉丝群里也吵起来"
+  },
+  {
+   "id": "fast",
+   "name": "速战速决",
+   "desc": "8 小时内赢"
+  },
+  {
+   "id": "noNem",
+   "name": "独来独往",
+   "desc": "赢，且不招来宿敌"
+  },
+  {
+   "id": "friend",
+   "name": "混成自己人",
+   "desc": "让一个网友把你当自己人"
+  },
+  {
+   "id": "noDelete",
+   "name": "说过的话不收回",
+   "desc": "赢，且一条评论都不删"
+  }
+ ]
 }</script>
 
 <script>
@@ -4860,9 +4950,11 @@ const Engine = (() => {
       flags: { streamed: false, streamTurn: null, officialUnlocked: false, decision: null, dataBranch: null, memeBorn: null, carriedRoots: [] },
       remixStep: -1, publicPosts: 0, stageLit: [false, false, false, false, false, false],
       sus: { main: 0, alt: 0 }, duelsThisTurn: 0, over: false, ending: null, costs: [], mascotFlag: false, stigma: 0, overreadQ: [], war: 0,
-      events: [], fx: [], news: null, grudge: {}, nemesis: null
+      events: [], fx: [], news: null, grudge: {}, nemesis: null,
+      cred: { main: 0, alt: 0 }, fav: {}, deletes: { main: 0, alt: 0 }, nurt: {}, task: null
     };
     scheduleEvents(s);
+    if (D.tasks && D.tasks.length) s.task = D.tasks[Math.floor(rand(s) * D.tasks.length)].id;
     return s;
   }
 
@@ -4922,7 +5014,7 @@ const Engine = (() => {
       if (top) {
         const [id, accId] = top[0].split('|');
         if (!acc(s, accId).exposed) {
-          s.nemesis = { id, acc: accId, since: s.turn, idle: 0 };
+          s.nemesis = { id, acc: accId, since: s.turn, idle: 0 }; s.hadNem = true;
           log(s, 'event', `「${npcDef(id).name}」跟你的${accId === 'main' ? '主号' : '小号'}吵了好几回，记住你了。他成了你的宿敌。`, id);
         }
       }
@@ -5091,6 +5183,7 @@ const Engine = (() => {
       const def = D.accounts.find(x => x.id === a.id);
       if (a.exposed) return { base, forced: 'I', note: '公认串子' };
       if (def.persona === 'sincere') base -= 1;
+      base -= (s.cred && s.cred[a.id]) || 0;
     }
     return { base, forced: null };
   }
@@ -5113,6 +5206,7 @@ const Engine = (() => {
     const a = acc(s, accId);
     if (!a || a.exposed) return;
     n.clues[accId] = (n.clues[accId] || 0) + k;
+    if (!preview && s.cred && s.cred[accId] > 0) s.cred[accId]--;
     if (!preview) {
       s.sus = s.sus || {}; s.susSeen = s.susSeen || {};
       const key = `${s.turn}|${accId}|${why}`;
@@ -5139,7 +5233,7 @@ const Engine = (() => {
   function playerPostProps(s, a, stance, ext) {
     const props = {};
     if (a.lastStance != null && sign(a.lastStance) !== 0 && sign(stance) !== 0 && sign(a.lastStance) !== sign(stance)) props.contradiction = true;
-    if (a.id === 'alt' && ext >= 2 && s.turn <= 4) props.flagNewExtreme = true;
+    if (a.id === 'alt' && ext >= 2 && s.turn <= 4 && !((s.cred && s.cred.alt) >= 1)) props.flagNewExtreme = true;
     s.turnCount = s.turnCount || {};
     if ((s.turnCount[a.id] || 0) >= 1) props.flagSpam = true;
     s.turnCount[a.id] = (s.turnCount[a.id] || 0) + 1;
@@ -5204,6 +5298,40 @@ const Engine = (() => {
       log(s, 'player', `${accName(a.id)}加入了萌新互助群。`);
       return { ok: true };
     }
+    if (act.type === 'delete') {
+      const c = claim(s, act.target);
+      if (!c || c.author.type !== 'acc' || c.deleted || c.kind !== 'guogai') return { error: '只能删自己的评论' };
+      const da = acc(s, c.author.id);
+      if (da.exposed) return { error: '已经被实锤了，删了也没用' };
+      if (c.turn < s.turn - 1) return { error: '太久了，早被截图了，删不掉' };
+      s.ap--;
+      const L = D.level.repair || {};
+      const accusedHere = s.claims.some(x => x.parent === c.id && x.accuse === da.id);
+      const before = s.sus[da.id] || 0;
+      s.sus[da.id] = Math.max(0, before - (L.deleteSus || 1) - (accusedHere ? 1 : 0));
+      s.deletes[da.id] = (s.deletes[da.id] || 0) + 1;
+      const rootDel = c.parent == null;
+      c.deleted = true; c.text = '该评论已删除'; c.core = ''; c.stance = 0; c.heat = 0;
+      if (rootDel) { c.locked = true; c.fuel = 0; }
+      log(s, 'event', `「${accName(da.id)}」删了一条评论${rootDel ? '，这楼也跟着没了' : ''}，嫌疑 ${before} → ${s.sus[da.id]}。`);
+      const spot = npc(s, 'c_spot');
+      const risk = s.deletes[da.id] >= 2 ? (L.deleteRisk2 || 0.6) : (L.deleteRisk || 0.35);
+      if (spot && rand(s) < risk) {
+        addClue(s, spot, da.id, 1, '删评跑路，心虚', false);
+        const pool = (D.npcTalk || {}).deleted;
+        if (pool && !rootDel) npcReply(s, spot, c, fmt(pickT(s, pool), c, s), 0, { crowd: true });
+        log(s, 'bad', `${npcDef('c_spot').name}看到「${accName(da.id)}」删评，记了一笔：删评跑路，心虚。`);
+      }
+      return { ok: true };
+    }
+    if (act.type === 'nurture') {
+      if (!a || a.exposed) return { error: '这个号已经废了' };
+      if ((s.cred[a.id] || 0) >= ((D.level.repair || {}).credMax || 1)) return { error: '这个号已经养得够熟了' };
+      if (s.turnCount && s.turnCount[a.id]) return { error: '这个号这一小时已经在吵架了，现在去别处装正常人没人信' };
+      s.ap--; s.cred[a.id] = (s.cred[a.id] || 0) + 1; s.nurt[a.id] = s.turn;
+      log(s, 'player', `「${accName(a.id)}」去别的视频底下正常聊了会儿天，号看着更像真人了。`);
+      return { ok: true };
+    }
     if (act.type === 'watch') {
       if (s.scout === s.turn) return { error: '这一小时已经在观察了' };
       s.ap--; s.scout = s.turn;
@@ -5220,6 +5348,7 @@ const Engine = (() => {
       log(s, 'player', `${accName(a.id)}私信${npcDef(n.id).name}：“你看看这个”——${p.text}`);
       return { ok: true };
     }
+    if (['post', 'reply', 'carry'].includes(act.type) && a && s.nurt && s.nurt[a.id] === s.turn) return { error: '这个号这一小时在别处养号，别在这儿露面' };
     if (['post', 'reply', 'carry'].includes(act.type) && fxOn(s, 'mute', a.id) && fxActive(s, 'mute').some(f => f.acc === a.id)) return { error: '平台风控：这个号的评论正在审核，这一小时发不出去' };
     const d = draftClaim(s, act);
     if (d.error) return d;
@@ -5244,7 +5373,7 @@ const Engine = (() => {
     }
     s.publicPosts++; s.ap--;
     noteTurnPost(s, a.id, c.root);
-    if (act.type === 'reply') comboEffects(s, a, c, claim(s, c.parent), d);
+    if (act.type === 'reply') { comboEffects(s, a, c, claim(s, c.parent), d); favorUp(s, a, c, claim(s, c.parent)); }
     c.move = mv;
     const spotN = npc(s, 'c_spot');
     if (used >= 3 && spotN) addClue(s, spotN, a.id, 1, `老用同一套路数（第 ${used} 次）`, false);
@@ -5293,6 +5422,53 @@ const Engine = (() => {
       log(s, 'event', `「${accName(a.id)}」站出来替「${accName(who)}」说话，${accName(who)}的嫌疑 ${before} → ${s.sus[who]}。`);
       caught((L.vouchRisk || 0.3) + (before >= lim - 2 ? 0.15 : 0), '一个被怀疑、另一个马上出来护，像是同一个人');
     }
+  }
+
+  // ---------- 混成自己人：常帮某个网友说话，他被你争取过来以后会替你挡枪 ----------
+  function favorUp(s, a, c, p) {
+    if (!p || p.author.type !== 'npc') return;
+    const def = npcDef(p.author.id);
+    if (!['fan', 'rival', 'newbie', 'hater'].includes(def.arch)) return;
+    if (!sign(c.stance) || sign(c.stance) !== sign(p.stance)) return;
+    const k = def.id + '|' + a.id;
+    s.fav[k] = (s.fav[k] || 0) + 1;
+    const need = (D.level.repair || {}).friendAt || 2;
+    if (s.fav[k] === need) { s.friendMade = true; }
+    if (s.fav[k] === need) log(s, 'event', `「${def.name}」把「${accName(a.id)}」当成了自己人：以后有人怀疑这个号，他会出来帮腔。`, def.id);
+  }
+  function friendOf(s, accId, circle, exclude) {
+    const need = (D.level.repair || {}).friendAt || 2;
+    return D.npcs.find(d => d.id !== exclude && d.circles.includes(circle) && (s.fav[d.id + '|' + accId] || 0) >= need && !npc(s, d.id).left);
+  }
+  function friendDefends(s, accId, target, why) {
+    const f = friendOf(s, accId, target.circle, target.author.type === 'npc' ? target.author.id : null);
+    if (!f || rand(s) > ((D.level.repair || {}).friendChance || 0.75)) return false;
+    const fn = npc(s, f.id);
+    const pool = (D.npcTalk || {}).defend;
+    const line = pool ? fmt(pickT(s, pool), target, s) : '@{who} 他是正常人，别乱说';
+    npcReply(s, fn, target, line, sign(fn.stance) * 2, { crowd: true });
+    s.sus[accId] = Math.max(0, (s.sus[accId] || 0) - 1);
+    s.fav[f.id + '|' + accId] -= 1;
+    log(s, 'event', `「${f.name}」${why}，站出来替「${accName(accId)}」说话，嫌疑 −1。`, f.id);
+    return true;
+  }
+  function taskState(s) {
+    const t = s.task; if (!t) return null;
+    const win = s.ending && s.ending.win;
+    const mine = s.claims.filter(c => c.author.type === 'acc');
+    const need = (D.level.repair || {}).friendAt || 2;
+    switch (t) {
+      case 'meme': return s.flags.memeBorn ? 'done' : 'open';
+      case 'staged2': return s.claims.filter(c => c.combo === 'staged').length >= 2 ? 'done' : 'open';
+      case 'clean': return (s.susMax || 0) > 4 ? 'fail' : win ? 'done' : 'open';
+      case 'mainOnly': return mine.some(c => c.author.id === 'alt') ? 'fail' : win ? 'done' : 'open';
+      case 'qun': return s.claims.some(c => c.circle === 'qun' && c.duel) ? 'done' : 'open';
+      case 'fast': return win ? (s.turn <= 8 ? 'done' : 'fail') : s.turn > 8 ? 'fail' : 'open';
+      case 'noNem': return s.hadNem ? 'fail' : win ? 'done' : 'open';
+      case 'friend': return s.friendMade ? 'done' : 'open';
+      case 'noDelete': return Object.values(s.deletes || {}).some(v => v > 0) ? 'fail' : win ? 'done' : 'open';
+    }
+    return 'open';
   }
 
   // ---------- NPC phase ----------
@@ -5720,7 +5896,7 @@ const Engine = (() => {
     }
     if (!line) return false;
     const rc = npcReply(s, n, t, line, stance, { crowd: true, duel: !!ctx.duel, lvl: ctx.duel ? (ctx.lvl || 1) : 0, meme: def.arch === 'echo' && s.flags.memeBorn && D.remix.includes(line) });
-    if (accused) rc.accuse = accused;
+    if (accused) { rc.accuse = accused; friendDefends(s, accused, rc, '看不下去了'); }
     if (ctx.duel) { claim(s, t.root).fight++; if (ctx.lvl !== 0 && t.stance !== 0) gainWar(s, 1); if (fromAcc) grudgeUp(s, def.id, t.author.id); ctx.duel = false; }
     n.involved = true;
     ctx.acted[def.id] = true;
@@ -5925,7 +6101,8 @@ const Engine = (() => {
     for (const p of pend) {
       const a = acc(s, p.acc); const c = circ(s, p.circle);
       const co = claim(s, p.claim);
-      const defused = co && (co.overread || s.claims.some(x => x.parent === co.id && x.author.type === 'acc'));
+      const fr = co && friendDefends(s, a.id, co, '看到挂人帖');
+      const defused = co && (fr || co.overread || s.claims.some(x => x.parent === co.id && x.author.type === 'acc'));
       if (!a.mascot && ((s.flags.memeBorn && c.fam >= 2) || (defused && rand(s) < 0.6))) {
         a.mascot = true; s.mascotFlag = true;
         s.npcs.forEach(n => { n.clues[a.id] = Math.min(n.clues[a.id] || 0, 2); });
@@ -6078,7 +6255,7 @@ const Engine = (() => {
   return {
     init, newGame, applyPlayer, endTurn, intents, decodePreview, draftClaim, forecast, replyHand, topicsOf,
     threadHeat, circleMainstream, weights, stageReached, leverage, canPost, maxThreadHeat,
-    helpers: { npcDef, accName, circleName, claim, acc, npc, circ, signalOf, accusedBy, comboKind }
+    helpers: { npcDef, accName, circleName, claim, acc, npc, circ, signalOf, accusedBy, comboKind, taskState, friendOf }
   };
 })();
 // ENGINE END
@@ -6246,7 +6423,8 @@ function renderVideo() {
 function metaRow(c, canReply) {
   const live = (c.kind === 'guogai' || c.kind === 'callout') && !S.over && !H.claim(S, c.root).locked;
   return `<div class="cmeta"><span>${clock(c.turn, c.id)}</span><span>${IC.like(15)} ${likes(c)}</span>
-    ${live && canReply ? `<button data-act="compose" data-mode="reply" data-id="${c.id}" data-guide="${c.author.type === 'acc' ? '' : 'replybtn'}">回复</button>${c.kind === 'guogai' ? `<button class="more-act" data-act="compose" data-mode="carry" data-id="${c.id}" title="截图搬运或私信" aria-label="更多：截图搬运或私信">···</button>` : ''}` : ''}
+    ${live && c.author.type === 'acc' && !c.deleted && c.kind === 'guogai' && c.turn >= S.turn - 1 && !H.acc(S, c.author.id).exposed ? `<button class="delbtn ${ui.delArm === c.id ? 'armed' : ''}" data-act="del" data-id="${c.id}">${ui.delArm === c.id ? '确定删除？（1 点行动力）' : '删除'}</button>` : ''}
+    ${live && canReply && !c.deleted ? `<button data-act="compose" data-mode="reply" data-id="${c.id}" data-guide="${c.author.type === 'acc' ? '' : 'replybtn'}">回复</button>${c.kind === 'guogai' ? `<button class="more-act" data-act="compose" data-mode="carry" data-id="${c.id}" title="截图搬运或私信" aria-label="更多：截图搬运或私信">···</button>` : ''}` : ''}
     ${c.parent == null && c.fight >= 2 ? `<span class="fightpill">对线中 · ${c.fight} 回合</span>` : ''}${radar(c)}</div>`;
 }
 function replyText(x) {
@@ -6262,13 +6440,13 @@ function commentHTML(r) {
   const repsHTML = reps.length ? `<div class="replies">
     ${hidden > 0 ? `<button class="more" data-act="expand" data-id="${r.id}">共 ${reps.length} 条回复，点击查看全部</button>` : ''}
     ${show.map(x => { const xw = who(x); const me = toMe(x); return `<div class="rep ${ui.flash === x.id ? 'flash' : ''} ${me ? 'tome' : ''}"><img class="av" src="${avatar(xw.seed)}" alt="">
-      <div style="min-width:0"><div class="rtext"><span class="who">${nameHTML(xw, x, r)}</span>${me ? `<span class="atme ${x.duel ? 'fire' : ''}">${x.duel ? '在怼你' : '@你'}</span>` : ''}${replyText(x)}</div>${metaRow(x, true)}</div></div>`; }).join('')}
+      <div style="min-width:0"><div class="rtext ${x.deleted ? 'deleted' : ''}"><span class="who">${nameHTML(xw, x, r)}</span>${me ? `<span class="atme ${x.duel ? 'fire' : ''}">${x.duel ? '在怼你' : '@你'}</span>` : ''}${replyText(x)}</div>${metaRow(x, true)}</div></div>`; }).join('')}
   </div>` : '';
   return `<div class="cm ${r.locked ? 'locked' : ''} ${ui.flash === r.id ? 'flash' : ''}"><img class="av" src="${avatar(w.seed)}" alt="">
     <div style="min-width:0"><div class="who">${nameHTML(w, r, null)}</div>
-      <p class="ctext ${r.signalMod < 0 ? 'shot' : ''}">${esc(cleanText(r.text))}</p>
+      <p class="ctext ${r.signalMod < 0 && !r.deleted ? 'shot' : ''} ${r.deleted ? 'deleted' : ''}">${esc(cleanText(r.text))}</p>
       ${r.kind === 'guogai' || r.kind === 'callout' ? metaRow(r, true) : `<div class="cmeta"><span>${clock(r.turn, r.id)}</span></div>`}
-      ${r.locked ? '<div class="locked-note">UP主已关闭这条评论的回复</div>' : ''}
+      ${r.locked && !r.deleted ? '<div class="locked-note">UP主已关闭这条评论的回复</div>' : ''}
       ${repsHTML}</div></div>`;
 }
 function inputBox(circle, placeholder) {
@@ -6365,7 +6543,7 @@ function hints() {
   const mh = Engine.maxThreadHeat(S);
   const sus = ['main', 'alt'].filter(a => (S.sus[a] || 0) >= DATA.level.calloutSus - 2 && !H.acc(S, a).exposed);
   if (!S.claims.length) out.push(`先发一条评论。字面在挺${esc(V.A)}、踩${esc(V.B)}的话，萌新「${esc(NM('agen'))}」会当真，还会截图搬进${esc(H.circleName('qun'))}。`);
-  if (sus.length) out.push(`「${esc(H.accName(sus[0]))}」嫌疑 ${S.sus[sus[0]]}/${DATA.level.calloutSus}，快被挂了。<b>这一小时别用这个号</b>（潜水一小时降 1），或者有人挂你时立刻回一句「懂你意思」把它搅成玩梗。`);
+  if (sus.length) out.push(`「${esc(H.accName(sus[0]))}」嫌疑 ${S.sus[sus[0]]}/${DATA.level.calloutSus}，快被挂了。<b>这一小时别用这个号</b>（潜水一小时降 1）。也可以<b>删掉</b>惹事的那条、用另一个号<b>洗白</b>，或者有人挂你时立刻回一句「懂你意思」把它搅成玩梗。`);
   const fighting = S.claims.filter(c => c.duel && c.parent != null && H.claim(S, c.parent).author.type === 'acc' && c.turn === S.turn - 1);
   if (fighting.length) out.push(`<b>${esc(who(fighting[0]).name)}</b>正在跟你对线。点他那条的「回复」接着怼、或者用「起哄」拱火，战火值涨得最快。`);
   else if (S.claims.length && S.war < DATA.level.warGoal / 2) out.push(`战火值 ${S.war}/${DATA.level.warGoal}。<b>点火</b>要靠对面当真的伪装：拉踩、捧杀、钓鱼、假中立。起哄、阴阳、懂你意思只能让<b>已经吵起来</b>的楼接着吵。`);
@@ -6405,7 +6583,11 @@ function renderTerm() {
   const meter = (v, max, cls) => `<span class="meter ${cls || ''}"><i style="width:${Math.min(100, v / max * 100)}%"></i></span>`;
   const nOff = S.claims.filter(c => c.circle === 'official' && c.author.type === 'acc').length;
   const offTxt = !S.flags.officialUnlocked ? '还没解锁：等主播开播把事带到官方动态' : S.flags.decision ? '官方已表态' : `热度 ${offHeat()}/${DATA.level.officialDecideHeat} · 你的评论 ${Math.min(nOff, 3)}/3`;
-  const accRow = (a) => { const st = H.acc(S, a); const v = S.sus[a] || 0; return `<div class="wl-row ${v >= DATA.level.calloutSus - 2 ? 'danger' : ''}"><span>${a === 'main' ? '主号' : '小号'}嫌疑</span>${meter(v, DATA.level.calloutSus, 'red')}<b>${st.exposed ? '实锤' : st.calledOut ? '被挂了' : `${v}/${DATA.level.calloutSus}`}</b></div>`; };
+  const accRow = (a) => { const st = H.acc(S, a); const v = S.sus[a] || 0; const cr = (S.cred && S.cred[a]) || 0;
+    const cm = (DATA.level.repair || {}).credMax || 1;
+    const canN = !S.over && !st.exposed && S.ap > 0 && cr < cm && !(S.turnCount && S.turnCount[a]) && !(S.nurt && S.nurt[a] === S.turn);
+    return `<div class="wl-row ${v >= DATA.level.calloutSus - 2 ? 'danger' : ''}"><span>${a === 'main' ? '主号' : '小号'}嫌疑</span>${meter(v, DATA.level.calloutSus, 'red')}<b>${st.exposed ? '实锤' : st.calledOut ? '被挂了' : `${v}/${DATA.level.calloutSus}`}</b></div>
+      <div class="wl-sub"><span>${cr >= cm ? '已养熟 ★' : '没养过'}${S.nurt && S.nurt[a] === S.turn ? ' · 这小时在养号' : ''}</span><button class="mini" data-act="nurture" data-id="${a}" ${canN ? '' : 'disabled'} title="花 1 点行动力，让这个号去别处正常聊天：说话更像真心话，新号的极端话也不扎眼。这一小时这个号不能吵架。被人怀疑会掉可信。">养号（1 点）</button></div>`; };
   const ladder = `<div class="wl" data-guide="wl">
       <div class="wl-h win">赢（任一）</div>
       <div class="wl-row"><span>全网大战</span>${meter(S.war, DATA.level.warGoal, 'fire')}<b>${S.war}/${DATA.level.warGoal}</b></div>
@@ -6413,6 +6595,7 @@ function renderTerm() {
       <div class="wl-h lose">输（任一）</div>
       ${accRow('main')}${accRow('alt')}
       <div class="wl-row"><span>剩余时间</span>${meter(DATA.level.turns - S.turn + 1, DATA.level.turns, 'time')}<b>${DATA.level.turns - S.turn + 1} 小时</b></div>
+      ${taskHTML()}
     </div>`;
   let guide;
   if (tut >= 0 && !S.over) {
@@ -6444,7 +6627,7 @@ function renderTerm() {
       const n = H.npc(S, d.id);
       const st = n.stance > 0 ? V.proStance : n.stance < 0 ? V.antiStance : '不站队';
       return `<button class="person" data-act="person" data-id="${d.id}" aria-expanded="${!!ui.open[d.id]}"><img class="av" src="${avatar(d.seed)}" alt="">
-        <span style="min-width:0;display:grid;gap:2px"><span><span class="n">${esc(d.name)}</span><span class="r">${esc(d.role)} · ${st} · 识别力 ${d.perception}</span></span>${susHTML(n)}
+        <span style="min-width:0;display:grid;gap:2px"><span><span class="n">${esc(d.name)}</span><span class="r">${esc(d.role)} · ${st} · 识别力 ${d.perception}</span>${['main', 'alt'].filter(a => (S.fav[d.id + '|' + a] || 0) >= ((DATA.level.repair || {}).friendAt || 2)).map(a => `<span class="friend">${a === 'main' ? '主号' : '小号'}的自己人</span>`).join('')}</span>${susHTML(n)}
         ${ui.open[d.id] ? `<span class="detail"><span>${esc(d.note)}</span></span>` : ''}</span></button>`;
     };
     plist = `<div class="group">评论区</div>${DATA.npcs.filter(n => n.arch && n.circles.includes('bar')).map(row).join('')}<div class="group">粉丝群</div>${DATA.npcs.filter(n => n.arch && n.circles.includes('qun')).map(row).join('')}`;
@@ -6469,6 +6652,13 @@ function renderTerm() {
   $('mbar').innerHTML = `<span class="time">${hh(S.turn)}${newsNow() ? `<em class="mnews">${esc(newsNow().tag)}</em>` : ''}</span><span class="sub"><span>战火 <b class="fire">${S.war}</b>/${DATA.level.warGoal} · 行动力 ${apDots()}</span><span>嫌疑 主号 ${sm('main')} · 小号 ${sm('alt')} / ${DATA.level.calloutSus}</span></span><button class="jump" data-act="toTerm">终端</button><button class="t-next" data-act="end" data-guide="next" ${S.over || dialog === 'play' ? 'disabled' : ''}>下一小时 ▶</button>`;
 }
 
+function taskDef() { return S.task && (DATA.tasks || []).find(t => t.id === S.task); }
+function taskText(t) { return t.desc.replace('{meme}', DATA.memeName); }
+function taskHTML() {
+  const t = taskDef(); if (!t) return '';
+  const st = H.taskState(S);
+  return `<div class="wl-h task">本局委托 <span class="tk ${st}">${st === 'done' ? '已完成' : st === 'fail' ? '失败' : '进行中'}</span></div><div class="task-row"><b>${esc(t.name)}</b>${esc(taskText(t))}<small>赢了且完成，评级 +1</small></div>`;
+}
 // ---------- compose modal ----------
 function act() {
   if (ui.mode === 'post') return { type: 'post', acc: ui.acc, circle: ui.circle, line: ui.line };
@@ -6876,6 +7066,7 @@ function renderOverlay() {
       <div class="b-vs"><span class="sideA">${esc(V.A)}</span><b>VS</b><span class="sideB">${esc(V.B)}</span></div>
       <div class="b-cards"><div class="b-card win"><h3>赢（任一）</h3><p><b>全网大战</b>：战火值打满 ${DATA.level.warGoal}</p><p><b>官方下场</b>：闹到${esc(H.circleName('official'))}，让官方出来回应</p></div>
         <div class="b-card lose"><h3>输（任一）</h3><p><b>被扒</b>：任一个号嫌疑满 ${DATA.level.calloutSus}，被挂实</p><p><b>超时</b>：${DATA.level.turns} 小时后还没打起来</p></div></div>
+      ${taskDef() ? `<div class="b-task"><b>本局委托 · ${esc(taskDef().name)}</b><span>${esc(taskText(taskDef()))}</span><small>赢了且完成，评级 +1</small></div>` : ''}
       <div class="skinrow"><span>界面风格</span>${skinChips()}</div>
       <div class="b-accs"><div><img src="${avatar(am.seed)}" alt=""><span><b>${esc(am.name)}</b>主号 · 老玩家，大家默认他说真心话</span></div><div><img src="${avatar(aa.seed)}" alt=""><span><b>${esc(aa.name)}</b>小号 · 新号，说什么都容易被怀疑</span></div></div>
       </div><div class="m-foot"><span class="tip">两家玩家互怼得越凶，战火涨得越快。</span><button class="go go-lg" data-act="briefGo">开始任务 ▶</button></div></div></div>`;
@@ -6941,7 +7132,9 @@ function renderOverlay() {
     const e = S.ending; const ed = DATA.endings[e.key];
     const hours = Math.min(S.turn, DATA.level.turns);
     const smax = S.susMax || 0;
-    const grade = !e.win ? 'D' : (hours <= 7 && smax <= 3) || e.key === 'meme' ? 'S' : hours <= 9 && smax <= 4 ? 'A' : hours <= 11 ? 'B' : 'C';
+    const grade0 = !e.win ? 'D' : (hours <= 7 && smax <= 3) || e.key === 'meme' ? 'S' : hours <= 9 && smax <= 4 ? 'A' : hours <= 11 ? 'B' : 'C';
+    const tdef = taskDef(), tst = H.taskState(S);
+    const grade = e.win && tst === 'done' ? ({ C: 'B', B: 'A', A: 'S', S: 'S' })[grade0] : grade0;
     const mine = S.claims.filter(c => c.author.type === 'acc');
     const backs = S.claims.filter(c => c.duel && c.parent != null && H.claim(S, c.parent).author.type === 'acc').length;
     const ach = [
@@ -6960,6 +7153,7 @@ function renderOverlay() {
     ov.innerHTML = `<div class="overlay"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="de"><div class="m-head"><h2 id="de">结局</h2><button data-act="closeDialog" aria-label="关闭">×</button></div><div class="m-body">
       <div class="end-head"><div class="rank r${grade}">${grade}</div><div><div class="dialog-grade ${e.win ? '' : 'lose'}">${esc(ed.grade)}</div><h2 style="margin:0;font-size:24px">${esc(ed.title)}</h2></div></div><p class="t-text">${esc(ed.text)}</p>
       ${extra.length ? `<p class="t-text" style="color:var(--t-ink-2)">${esc(extra.join(' · '))}</p>` : ''}
+      ${tdef ? `<div class="task-row end ${tst}"><b>委托 · ${esc(tdef.name)}</b>${esc(taskText(tdef))}<small>${tst === 'done' ? (e.win ? (grade !== grade0 ? `完成！评级 ${grade0} → ${grade}` : '完成！（已经是 S 了）') : '完成了，可惜没赢') : '没完成'}</small></div>` : ''}
       <div class="stats"><div><span>战火值</span><b>${S.war}/${DATA.level.warGoal}</b></div><div><span>公开发言</span><b>${S.publicPosts}</b></div><div><span>用了几小时</span><b>${Math.min(S.turn, DATA.level.turns)}</b></div></div>
       <div class="row"><span class="lbl">成就 ${ach.filter(x => x[2]).length}/${ach.length}</span><div class="ach">${ach.map(([n, d, ok]) => `<div class="${ok ? 'on' : ''}" title="${esc(d)}"><b>${esc(n)}</b><small>${esc(d)}</small></div>`).join('')}</div></div>
       <div class="row"><span class="lbl">事情是怎么变成这样的</span><div class="chain">${chainHTML()}</div></div>
@@ -7075,9 +7269,18 @@ document.addEventListener('click', (ev) => {
     render(); return;
   }
   const b = ev.target.closest('[data-act]');
+  if (ui.delArm && (!b || b.dataset.act !== 'del')) { ui.delArm = null; if (!b) { render(); return; } }
   if (!b) return;
   const a = b.dataset.act, id = b.dataset.id;
   if (a === 'scout') { const r = Engine.applyPlayer(S, { type: 'watch', acc: ui.acc }); if (r.error) toast(esc(r.error)); else { ui.showWho = true; toast('潜水观察中：这一小时的预测变精确了'); } render(); return; }
+  if (a === 'del') {
+    if (ui.delArm !== Number(id)) { ui.delArm = Number(id); render(); return; }
+    ui.delArm = null;
+    const r = Engine.applyPlayer(S, { type: 'delete', target: Number(id) });
+    if (r.error) toast(esc(r.error)); else toast('删掉了。嫌疑降了一点，但可能有人截了图');
+    render(); return;
+  }
+  if (a === 'nurture') { const r = Engine.applyPlayer(S, { type: 'nurture', acc: id }); if (r.error) toast(esc(r.error)); else toast(`「${esc(AN(id))}」去别处养号了，这一小时它不露面`); render(); return; }
   if (a === 'skin') { if (dialog === 'play' || dialog === 'compose') return; dialog = 'skin'; render(); return; }
   if (a === 'setSkin') { setSkin(id); render(); return; }
   if (a === 'closeCompose-bg') { if (ev.target === b) { dialog = null; if (tut >= 1 && tut <= 3) tut = 0; render(); } return; }
